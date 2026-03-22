@@ -19,7 +19,7 @@ public class TripController {
 //        this.tripService = tripService;
 //        this.creditService = creditService;
 //    }
-    //we have reuiqredArgsConstructor so we dont need the above anymore
+        //we have reuiqredArgsConstructor so we dont need the above anymore
 
     //hung cmt
 //    @PostMapping
