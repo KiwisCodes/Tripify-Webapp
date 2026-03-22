@@ -1,5 +1,6 @@
 package com.vgu.tripify.service.impl;
 
+import com.vgu.tripify.domain.dto.response.CheckoutResponse;
 import com.vgu.tripify.service.PaymentService;
 import org.springframework.stereotype.Service;
 

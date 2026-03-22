@@ -1,5 +1,8 @@
 package com.vgu.tripify.service.impl;
 
+import com.vgu.tripify.domain.dto.request.TripGenerationRequest;
+import com.vgu.tripify.domain.dto.response.TripDetailResponse;
+import com.vgu.tripify.domain.dto.response.TripSummaryResponse;
 import com.vgu.tripify.domain.entity.Trip;
 import com.vgu.tripify.repository.TripRepository;
 import com.vgu.tripify.service.TripService;
@@ -15,12 +18,12 @@ public class TripServiceImpl implements TripService {
     private final TripRepository tripRepository;
 
     @Override
-    public TripResponse generateTrip(Long userId, TripGenerationRequest request) {
+    public TripDetailResponse generateTrip(Long userId, TripGenerationRequest request) {
         return null;
     }
 
     @Override
-    public TripResponse getTripById(Long userId, Long tripId) {
+    public TripDetailResponse getTripById(Long userId, Long tripId) {
         return null;
     }
 
