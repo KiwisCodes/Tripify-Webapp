@@ -1,5 +1,7 @@
 package com.vgu.tripify.controller;
 
+import com.vgu.tripify.domain.dto.request.TripGenerationRequest;
+import com.vgu.tripify.domain.dto.response.TripDetailResponse;
 import com.vgu.tripify.domain.entity.Trip;
 import com.vgu.tripify.service.CreditService;
 import com.vgu.tripify.service.TripService;
@@ -19,13 +21,13 @@ public class TripController {
 //        this.tripService = tripService;
 //        this.creditService = creditService;
 //    }
-        //we have reuiqredArgsConstructor so we dont need the above anymore
+        //we have RequiredArgsConstructor so we dont need the above anymore
 
     //hung cmt
-//    @PostMapping
-//    public TripResponse createTrip(@RequestBody TripRequest request){
-//        creditService.deductCredit(request.userId(), 1);
-//        return tripService.generateTrip(request.userId(), request);
+//    @PostMapping("/{userId}")
+//    public TripDetailResponse createTrip(@PathVariable Long userId, @RequestBody TripGenerationRequest request){
+//        creditService.deductCredit(userId, 1);
+//        return tripService.generateTrip(userId, request);
 //    }
 
     @GetMapping("/credits/{userId}")
