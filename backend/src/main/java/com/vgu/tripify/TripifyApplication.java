@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TripifyApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(TripifyApplication.class, args);
+    public static void main(String[] args) {
+        SpringApplication.run(TripifyApplication.class, args);
         System.out.println("Hello World");
-	}
-    @GetMapping
-    public String helloWorld(){
-        return "Hello World Spring Boot";
     }
 
+    @GetMapping
+    public String helloWorld() {
+        return "Hello World Spring Boot 3636";
+    }
 
 }
