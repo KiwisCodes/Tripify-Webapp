@@ -4,7 +4,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class CostEstimateDto {
+public class CostEstimateResponse {
     private BigDecimal estimateHotelPerNight;
     private BigDecimal estimateFoodPerDay;
     private BigDecimal estimateActivityPerDay;

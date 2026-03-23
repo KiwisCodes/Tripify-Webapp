@@ -1,11 +1,12 @@
 package com.vgu.tripify.controller;
 
+import com.vgu.tripify.domain.dto.request.RegisterRequest;
+import com.vgu.tripify.domain.dto.response.UserResponse;
 import com.vgu.tripify.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
@@ -16,6 +17,14 @@ public class UserController {
 //    public UserController(UserService userService) {
 //        this.userService = userService;
 //    }
+
+    @PostMapping("/register")
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody RegisterRequest request) {
+        // Pass the DTO request to userService
+        UserResponse createdUser = userService.register(request);
+        // Return 201 Created status and the safe UserResponse DTO
+        return ResponseEntity.ok().body(createdUser);
+    }
 
     @PostMapping("/mock-register")
     public String mockRegister(){

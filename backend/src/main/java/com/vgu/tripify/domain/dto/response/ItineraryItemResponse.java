@@ -2,7 +2,7 @@ package com.vgu.tripify.domain.dto.response;
 import lombok.Data;
 
 @Data
-public class ItineraryItemDto {
+public class ItineraryItemResponse {
     private String time;
     private String placeName;
     private String placeType; // Attraction , FOOD, HOTEL
