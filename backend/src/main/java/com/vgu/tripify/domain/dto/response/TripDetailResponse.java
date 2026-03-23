@@ -9,6 +9,6 @@ public class TripDetailResponse {
     private Long id;
     private String destinationCity;
     private String budgetBracket;
-    private List<DailyItineraryDto> dayItineraries;
-    private CostEstimateDto estimateCosts;
+    private List<DailyItineraryResponse> dayItineraries;
+    private CostEstimateResponse estimateCosts;
 }
