@@ -39,4 +39,12 @@ public class GlobalExceptionHandler {
         // Field error is the one field, which has been violated( e.g username or email)
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
+
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<Map<String, String>> handleEmailExists (EmailAlreadyExistsException ex) {
+        Map<String, String> errors = new HashMap<>();
+
+        errors.put(ex.getField(), ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errors);
+    }
 }

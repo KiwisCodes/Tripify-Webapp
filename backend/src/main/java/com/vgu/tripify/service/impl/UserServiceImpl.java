@@ -5,6 +5,7 @@ import com.vgu.tripify.domain.dto.request.UpdateUserRequest;
 import com.vgu.tripify.domain.dto.response.UserResponse;
 import com.vgu.tripify.domain.entity.User;
 import com.vgu.tripify.domain.enums.Role;
+import com.vgu.tripify.exception.EmailAlreadyExistsException;
 import com.vgu.tripify.repository.UserRepository;
 import com.vgu.tripify.service.UserService;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse register(RegisterRequest request) {
         // 1. check if email exists
         if(userRepository.existsByEmail(request.getEmail())){
-            throw new RuntimeException("Email already exists");
+            throw new EmailAlreadyExistsException("email","This Email is already registered");
         }
         // 2. Create new database entity
         User newUser = new User();
