@@ -1,5 +1,7 @@
 package com.vgu.tripify.domain.dto.request;
 
+import com.vgu.tripify.domain.entity.Destination;
+import com.vgu.tripify.domain.enums.BudgetBracket;
 import lombok.Data;
 import jakarta.validation.constraints.*;
 
@@ -15,5 +17,5 @@ public class TripGenerationRequest {
 
     @NotBlank(message = "Budget bracket is required")
     @Pattern(regexp = "^(LOW|MEDIUM|HIGH)$", message = "Budget must be LOW, MEDIUM or HIGH")
-    private String budgetBracket;
+    private BudgetBracket budgetBracket;
 }

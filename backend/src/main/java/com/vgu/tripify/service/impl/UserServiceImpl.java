@@ -65,7 +65,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updatePersonalDetail(Long id, UpdateUserRequest request) {
+    public UserResponse updatePersonalDetail(UpdateUserRequest request) {
+        User user = userRepository.findByEmail(request.getEmail());
 
+        if(user == null){
+            throw new RuntimeException("User not found");
+        }
+
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setRole(Role.valueOf(request.getRole()));
+
+        User saveUser = userRepository.save(user);
+
+        UserResponse userResponse = new UserResponse();
+        userResponse.setRole(saveUser.getRole().name());
+        userResponse.setEmail(saveUser.getEmail());
+        return userResponse;
     }
 }

@@ -15,7 +15,25 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:8080/
+PUT http://localhost:8080/api/users/update
+Content-Type: application/json
+
+{
+  "email": "minhhoang.vuduc@gmail.com",
+  "firstName": "Duc Minh Hoang",
+  "lastName": "Vu",
+  "role": "PREMIUM"
+}
+
+###
+POST http://localhost:8080/api/trips/{{minhhoang.vuduc@gmail.com}}
+Content-Type: application/json
+
+{
+  "destinationCity": "Ho Chi Minh City",
+  "budgetBracket": "LOW",
+  "tripDuration": 7
+}
 
 ###
 DELETE http://localhost:8080/

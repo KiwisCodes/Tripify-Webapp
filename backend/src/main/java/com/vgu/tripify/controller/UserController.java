@@ -1,6 +1,7 @@
 package com.vgu.tripify.controller;
 
 import com.vgu.tripify.domain.dto.request.RegisterRequest;
+import com.vgu.tripify.domain.dto.request.UpdateUserRequest;
 import com.vgu.tripify.domain.dto.response.UserResponse;
 import com.vgu.tripify.service.UserService;
 import jakarta.validation.Valid;
@@ -26,8 +27,10 @@ public class UserController {
         return ResponseEntity.ok().body(createdUser);
     }
 
-    @PostMapping("/mock-register")
-    public String mockRegister(){
-        return "mock register";
+    @PutMapping("/update")
+    public ResponseEntity<UserResponse> updateUser(@Valid @RequestBody UpdateUserRequest request) {
+        UserResponse updatedUser = userService.updatePersonalDetail(request);
+        return  ResponseEntity.ok().body(updatedUser);
     }
+
 }

@@ -1,5 +1,6 @@
 package com.vgu.tripify.domain.dto.response;
 
+import com.vgu.tripify.domain.enums.BudgetBracket;
 import lombok.Data;
 
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
 public class TripDetailResponse {
     private Long id;
     private String destinationCity;
-    private String budgetBracket;
+    private BudgetBracket budgetBracket;
     private List<DailyItineraryResponse> dayItineraries;
     private CostEstimateResponse estimateCosts;
 }

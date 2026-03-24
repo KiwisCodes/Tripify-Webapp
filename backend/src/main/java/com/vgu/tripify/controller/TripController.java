@@ -6,6 +6,7 @@ import com.vgu.tripify.domain.entity.Trip;
 import com.vgu.tripify.service.CreditService;
 import com.vgu.tripify.service.TripService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,11 +25,12 @@ public class TripController {
         //we have RequiredArgsConstructor so we dont need the above anymore
 
     //hung cmt
-//    @PostMapping("/{userId}")
-//    public TripDetailResponse createTrip(@PathVariable Long userId, @RequestBody TripGenerationRequest request){
+    @PostMapping("/{userId}")
+    public ResponseEntity<TripDetailResponse> createTrip(@PathVariable Long userId, @RequestBody TripGenerationRequest request){
 //        creditService.deductCredit(userId, 1);
-//        return tripService.generateTrip(userId, request);
-//    }
+        TripDetailResponse tripDetailResponse = tripService.generateTrip(userId, request);
+        return ResponseEntity.ok().body(tripDetailResponse);
+    }
 
     @GetMapping("/credits/{userId}")
     public int getCredits(@PathVariable("userId") Long userId){
