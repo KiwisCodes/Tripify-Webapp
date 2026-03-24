@@ -20,6 +20,8 @@ public class User {
     private Long id;
     private String email;
     private Role role;
+    private String firstName;
+    private String lastName;
     private Integer credits = 5;//start with 5 credits for ex
     private String passwordHash;
 
