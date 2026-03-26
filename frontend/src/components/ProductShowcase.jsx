@@ -3,187 +3,153 @@ import React, { useEffect, useRef } from 'react';
 const ProductShowcase = () => {
     const cardRef = useRef(null);
 
+    // Scroll reveal logic
     useEffect(() => {
         const el = cardRef.current;
         if (!el) return;
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    el.classList.add('is-visible');
-                    observer.unobserve(el);
-                }
-            },
-            { threshold: 0.1 }
-        );
+        const observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting) {
+                el.classList.add('is-visible');
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+                observer.unobserve(el);
+            }
+        }, { threshold: 0.1 });
         observer.observe(el);
         return () => observer.disconnect();
     }, []);
 
     return (
         <section
-            className="relative w-full overflow-hidden"
+            className="relative w-full overflow-hidden flex items-center bg-[#f8fafc] dark:bg-slate-900 py-32"
             id="product"
-            style={{ minHeight: '600px', height: '85vh', backgroundColor: '#f8fafc' }}
         >
-            {/* ── Dark mode compatible bg color ── */}
-            <div className="absolute inset-0 bg-gray-50 dark:bg-slate-900" />
-
-            {/* ── Map grid lines ── */}
+            {/* ── Background Grids ── */}
             <div
-                className="absolute inset-0"
+                className="absolute inset-0 pointer-events-none opacity-40 dark:opacity-20"
                 style={{
                     backgroundImage: `
-                        linear-gradient(rgba(99,102,241,0.12) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(99,102,241,0.12) 1px, transparent 1px)
+                        linear-gradient(rgba(99,102,241,0.1) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(99,102,241,0.1) 1px, transparent 1px)
                     `,
-                    backgroundSize: '56px 56px',
+                    backgroundSize: '40px 40px',
                 }}
             />
-            {/* Horizontal "road" bands */}
-            <div
-                className="absolute inset-0 opacity-20 dark:opacity-10"
-                style={{
-                    backgroundImage: `
-                        linear-gradient(transparent 38px, rgba(148,163,184,0.6) 38px, rgba(148,163,184,0.6) 41px, transparent 41px),
-                        linear-gradient(90deg, transparent 90px, rgba(148,163,184,0.6) 90px, rgba(148,163,184,0.6) 93px, transparent 93px)
-                    `,
-                    backgroundSize: '180px 180px',
-                }}
+
+            {/* ── Visual Overlays ── */}
+            <div className="absolute inset-0 pointer-events-none"
+                style={{ background: 'radial-gradient(circle at 70% 50%, rgba(99,102,241,0.08) 0%, transparent 60%)' }}
             />
-            {/* Color wash overlay */}
-            <div
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                    background: 'radial-gradient(ellipse 80% 70% at 40% 55%, rgba(99,102,241,0.1) 0%, transparent 65%), radial-gradient(ellipse 50% 50% at 75% 35%, rgba(6,182,212,0.08) 0%, transparent 60%)',
-                }}
-            />
-            {/* Edge vignette */}
-            <div className="absolute inset-0 pointer-events-none" style={{
-                background: 'linear-gradient(to right, rgba(248,250,252,0.6) 0%, transparent 15%, transparent 85%, rgba(248,250,252,0.6) 100%)',
-            }} />
-            <div className="absolute inset-0 dark:block hidden pointer-events-none" style={{
-                background: 'linear-gradient(to right, rgba(15,23,42,0.6) 0%, transparent 15%, transparent 85%, rgba(15,23,42,0.6) 100%)',
-            }} />
 
-            {/* ── SVG Route with map pins (landscape-friendly viewBox) ── */}
-            <div className="absolute inset-0 z-10 pointer-events-none">
-                <svg
-                    width="100%"
-                    height="100%"
-                    viewBox="0 0 160 90"
-                    preserveAspectRatio="xMidYMid slice"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <defs>
-                        <linearGradient id="rg2" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stopColor="#06b6d4" />
-                            <stop offset="100%" stopColor="#6366f1" />
-                        </linearGradient>
-                        <filter id="pinShadow" x="-40%" y="-40%" width="180%" height="180%">
-                            <feDropShadow dx="0" dy="0.5" stdDeviation="0.8" floodColor="#000" floodOpacity="0.25" />
-                        </filter>
-                    </defs>
-
-                    {/* Animated route path */}
-                    <path
-                        className="map-route-path"
-                        d="M 32,58 C 52,38 72,62 90,52 S 118,38 132,42"
-                        fill="none"
-                        stroke="url(#rg2)"
-                        strokeLinecap="round"
-                        strokeWidth="1.2"
-                        opacity="0.85"
-                    />
-
-                    {/* ── Pin 1: Tsukiji (32, 58) ── */}
-                    <g transform="translate(32,58)">
-                        <circle r="3" fill="white" filter="url(#pinShadow)" />
-                        <circle r="1.6" fill="#6366f1" />
-                        {/* Tooltip */}
-                        <rect x="-2" y="-12" rx="1.2" width="28" height="7" fill="white" stroke="#c7d2fe" strokeWidth="0.4" filter="url(#pinShadow)" />
-                        <text x="12" y="-7.8" textAnchor="middle" fontSize="2.4" fontWeight="700" fill="#4338ca" fontFamily="Inter,sans-serif">
-                            09:00 • Tsukiji Market
-                        </text>
-                    </g>
-
-                    {/* ── Pin 2: Meiji Jingu (90, 52) ── */}
-                    <g transform="translate(90,52)">
-                        <circle r="3" fill="white" filter="url(#pinShadow)" />
-                        <circle r="1.6" fill="#06b6d4" />
-                        {/* Tooltip */}
-                        <rect x="-2" y="-12" rx="1.2" width="25" height="7" fill="white" stroke="#a5f3fc" strokeWidth="0.4" filter="url(#pinShadow)" />
-                        <text x="10.5" y="-7.8" textAnchor="middle" fontSize="2.4" fontWeight="700" fill="#0e7490" fontFamily="Inter,sans-serif">
-                            01:00 • Meiji Jingu
-                        </text>
-                    </g>
-
-                    {/* ── Pin 3: Shinjuku (132, 42) — destination ── */}
-                    <g transform="translate(132,42)">
-                        <circle r="4" fill="url(#rg2)" filter="url(#pinShadow)" />
-                        <text x="0" y="1.4" textAnchor="middle" fontSize="3.5" fill="white" fontFamily="sans-serif">★</text>
-                        {/* Tooltip */}
-                        <rect x="-14" y="-12" rx="1.2" width="30" height="7" fill="white" stroke="#c7d2fe" strokeWidth="0.4" filter="url(#pinShadow)" />
-                        <text x="1" y="-7.8" textAnchor="middle" fontSize="2.4" fontWeight="700" fill="#4338ca" fontFamily="Inter,sans-serif">
-                            Neon Shinjuku Dinner
-                        </text>
-                    </g>
-                </svg>
-            </div>
-
-            {/* ── Itinerary sidebar card ── */}
-            <div
-                ref={cardRef}
-                className="reveal-right absolute bottom-8 right-6 md:right-10 z-20 w-72 md:w-80"
-                style={{ maxHeight: '78%' }}
-            >
-                <div className="bg-white dark:bg-slate-900 rounded-[2rem] border border-gray-200 dark:border-slate-700 shadow-2xl overflow-hidden flex flex-col">
-                    <div className="p-6 overflow-y-auto no-scrollbar">
-                        <div className="mb-5">
-                            <div className="flex items-center gap-1.5 text-indigo-600 dark:text-cyan-400 mb-2 font-mono text-[10px] uppercase tracking-widest">
-                                <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>map</span>
-                                Itinerary / Tokyo
-                            </div>
-                            <h3 className="text-xl font-bold tracking-tight mb-1">Day 1: Neon Shinjuku</h3>
-                            <p className="text-gray-500 dark:text-slate-400 text-xs">Kickoff in the heart of the metropolis.</p>
-                        </div>
-
-                        <div className="space-y-0">
-                            {[
-                                { color: 'bg-indigo-500', time: '09:00 AM', place: 'Tsukiji Market', note: 'Freshest sushi in the world.' },
-                                { color: 'bg-cyan-500', time: '01:00 PM', place: 'Meiji Jingu Forest', note: 'A serene escape from city chaos.' },
-                                { color: 'bg-gradient-to-b from-cyan-500 to-indigo-600', time: '07:30 PM', place: 'Neon Shinjuku Dinner', note: 'Hidden izakaya, electric atmosphere.' },
-                            ].map((stop, i, arr) => (
-                                <div key={i} className="flex gap-3">
-                                    <div className="flex flex-col items-center">
-                                        <div className={`w-2.5 h-2.5 rounded-full shrink-0 mt-1 ${stop.color}`} />
-                                        {i < arr.length - 1 && <div className="w-px flex-1 bg-gray-200 dark:bg-slate-700 my-1" style={{ minHeight: '24px' }} />}
-                                    </div>
-                                    <div className="pb-4">
-                                        <h4 className="font-bold text-xs">{stop.time} — {stop.place}</h4>
-                                        <p className="text-[10px] text-gray-500 dark:text-slate-400 mt-0.5">{stop.note}</p>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="mt-2 p-4 rounded-2xl bg-gray-50 dark:bg-slate-800 border border-gray-100 dark:border-slate-700">
-                            <h5 className="text-[9px] font-bold uppercase tracking-widest text-gray-400 mb-2">Estimated Costs</h5>
-                            <div className="space-y-1.5 text-[10px]">
-                                {[['Food & Drink', '$45'], ['Transport', '$12']].map(([k, v]) => (
-                                    <div key={k} className="flex justify-between text-gray-500">
-                                        <span>{k}</span><span className="font-mono">{v}</span>
-                                    </div>
-                                ))}
-                                <div className="flex justify-between font-bold text-indigo-600 dark:text-cyan-400 border-t border-gray-200 dark:border-slate-700 pt-1.5 mt-1">
-                                    <span>Daily Total</span><span className="font-mono">$77</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button className="w-full mt-5 py-3 bg-gradient-to-r from-cyan-500 to-indigo-600 text-white text-xs font-bold rounded-xl shadow-lg hover:opacity-90 active:scale-95"
-                            style={{ transition: 'opacity 0.2s ease, transform 0.15s ease' }}>
-                            Book Full Route
+            <div className="container mx-auto px-6 max-w-7xl relative z-10 flex flex-col lg:flex-row items-center justify-between gap-16">
+                
+                {/* ── Left Side: Content ── */}
+                <div className="w-full lg:w-1/2 text-center lg:text-left">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs font-bold uppercase tracking-widest mb-6">
+                        <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                        </span>
+                        A Better Way to Plan
+                    </div>
+                    <h2 className="text-4xl md:text-6xl font-black tracking-tight mb-8 text-slate-900 dark:text-white leading-[1.1]">
+                        Every detail, <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-cyan-500">perfectly organized.</span>
+                    </h2>
+                    <p className="text-lg text-slate-600 dark:text-slate-400 max-w-xl mx-auto lg:mx-0 leading-relaxed mb-10">
+                        Stop juggling tabs and spreadsheets. Our AI handles the logistics, generating comprehensive itineraries including route optimization, cost estimates, and local hidden gems.
+                    </p>
+                    
+                    <div className="flex flex-wrap justify-center lg:justify-start gap-4">
+                        <button className="px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-950 font-bold rounded-2xl hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors shadow-xl">
+                            Try It Out
                         </button>
+                        <button className="px-8 py-4 bg-white dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 font-bold rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+                            Watch Demo
+                        </button>
+                    </div>
+                </div>
+
+                {/* ── Right Side: Itinerary Card ── */}
+                <div className="w-full lg:w-1/2 flex justify-center lg:justify-end">
+                    <div
+                        ref={cardRef}
+                        className="w-full max-w-sm transition-all duration-1000 ease-out translate-y-12 opacity-0"
+                    >
+                        {/* Enhanced Float Animation with CSS */}
+                        <style dangerouslySetInnerHTML={{ __html: `
+                            @keyframes float-card {
+                                0% { transform: translateY(0px); }
+                                50% { transform: translateY(-15px); }
+                                100% { transform: translateY(0px); }
+                            }
+                            .float-animation {
+                                animation: float-card 6s ease-in-out infinite;
+                            }
+                        `}} />
+
+                        <div className="float-animation bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-[2.5rem] border border-slate-200/50 dark:border-slate-800/50 shadow-[0_30px_60px_rgba(0,0,0,0.12)] dark:shadow-[0_30px_60px_rgba(0,0,0,0.4)] overflow-hidden flex flex-col">
+                            <div className="p-8 md:p-10">
+                                <div className="mb-8 relative">
+                                    <div className="flex items-center gap-2 text-indigo-600 dark:text-cyan-400 mb-4 font-mono text-[11px] uppercase tracking-[0.2em] font-black">
+                                        <span className="material-symbols-outlined text-lg">calendar_today</span>
+                                        Day 1: Tokyo
+                                    </div>
+                                    <h3 className="text-3xl font-black tracking-tight mb-2 text-slate-900 dark:text-white">Neon Shinjuku</h3>
+                                    <div className="w-12 h-1.5 bg-gradient-to-r from-indigo-500 to-cyan-400 rounded-full"></div>
+                                </div>
+
+                                <div className="space-y-0 relative">
+                                    {/* Vertical Timeline Path */}
+                                    <div className="absolute left-[7px] top-6 bottom-12 w-[2px] bg-slate-100 dark:bg-slate-800 z-0"></div>
+                                    
+                                    {[
+                                        { color: 'bg-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.5)]', time: '09:00 AM', place: 'Tsukiji Market', note: 'Freshest sushi globally.' },
+                                        { color: 'bg-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.5)]', time: '01:00 PM', place: 'Meiji Jingu', note: 'Shinto forest shrine.' },
+                                        { color: 'bg-gradient-to-b from-indigo-500 to-cyan-500 shadow-[0_0_15px_rgba(99,102,241,0.4)]', time: '07:30 PM', place: 'Golden Gai', note: 'Vibrant local izakayas.' },
+                                    ].map((stop, i) => (
+                                        <div key={i} className="flex gap-6 relative z-10 mb-8">
+                                            <div className="flex flex-col items-center pt-1.5">
+                                                <div className={`w-4 h-4 rounded-full border-4 border-white dark:border-slate-900 shrink-0 relative transition-transform hover:scale-125 cursor-pointer ${stop.color}`} title={stop.place} />
+                                            </div>
+                                            <div>
+                                                <h4 className="font-bold text-sm md:text-base text-slate-900 dark:text-white tracking-tight">{stop.time} — {stop.place}</h4>
+                                                <p className="text-[13px] text-slate-500 dark:text-slate-400 mt-1.5">
+                                                    {stop.note}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className="mt-4 p-6 rounded-3xl bg-slate-50/50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50 group hover:border-indigo-500/30 transition-colors duration-500">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <h5 className="text-[10px] font-black uppercase tracking-widest text-slate-400">Daily Forecast</h5>
+                                        <span className="flex items-center gap-1 text-xs font-bold text-slate-600 dark:text-slate-300">
+                                            <span className="material-symbols-outlined text-sm text-amber-400">wb_sunny</span> 22°C
+                                        </span>
+                                    </div>
+                                    <div className="space-y-3">
+                                        {[
+                                            { label: 'Food & Drink', cost: '$45' },
+                                            { label: 'Transport', cost: '$12' }
+                                        ].map((item, idx) => (
+                                            <div key={idx} className="flex justify-between text-[11px] md:text-xs">
+                                                <span className="text-slate-500 dark:text-slate-400 font-medium">{item.label}</span>
+                                                <span className="font-mono font-bold text-slate-700 dark:text-slate-300">{item.cost}</span>
+                                            </div>
+                                        ))}
+                                        <div className="flex justify-between font-black text-indigo-600 dark:text-cyan-400 border-t border-slate-200/50 dark:border-slate-700/50 pt-3.5 mt-2.5 text-sm md:text-base">
+                                            <span>Budget</span><span className="font-mono">$77</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button className="w-full mt-8 py-5 bg-gradient-to-br from-indigo-500 via-indigo-600 to-cyan-500 text-white text-sm md:text-base font-black rounded-[1.25rem] shadow-[0_20px_40px_rgba(79,70,229,0.25)] hover:shadow-[0_25px_50px_rgba(79,70,229,0.35)] hover:-translate-y-1 active:scale-[0.97] transition-all duration-300">
+                                    View Full Itinerary
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

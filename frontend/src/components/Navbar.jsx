@@ -43,7 +43,7 @@ const Navbar = () => {
 
                     {/* Nav links */}
                     <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-500 dark:text-slate-400">
-                        {['How it Works|#how-it-works', 'Product|#product', 'Reviews|#testimonials', 'Pricing|#pricing'].map((item) => {
+                        {['How it Works|#how-it-works', 'Explore|#explore-globe', 'Product|#product', 'Reviews|#testimonials', 'Pricing|#pricing'].map((item) => {
                             const [label, href] = item.split('|');
                             return (
                                 <a
