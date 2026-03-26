@@ -21,7 +21,7 @@ const ProductShowcase = () => {
 
     return (
         <section
-            className="relative w-full overflow-hidden flex items-center bg-[#f8fafc] dark:bg-slate-900 py-32"
+            className="relative w-full overflow-hidden flex items-center bg-[#f8fafc] dark:bg-slate-900 py-20 md:py-32"
             id="product"
         >
             {/* ── Background Grids ── */}
@@ -41,7 +41,7 @@ const ProductShowcase = () => {
                 style={{ background: 'radial-gradient(circle at 70% 50%, rgba(99,102,241,0.08) 0%, transparent 60%)' }}
             />
 
-            <div className="container mx-auto px-6 max-w-7xl relative z-10 flex flex-col lg:flex-row items-center justify-between gap-16">
+            <div className="container mx-auto px-4 sm:px-6 max-w-7xl relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16">
                 
                 {/* ── Left Side: Content ── */}
                 <div className="w-full lg:w-1/2 text-center lg:text-left">
@@ -52,7 +52,7 @@ const ProductShowcase = () => {
                         </span>
                         A Better Way to Plan
                     </div>
-                    <h2 className="text-4xl md:text-6xl font-black tracking-tight mb-8 text-slate-900 dark:text-white leading-[1.1]">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight mb-6 md:mb-8 text-slate-900 dark:text-white leading-[1.1]">
                         Every detail, <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-cyan-500">perfectly organized.</span>
                     </h2>

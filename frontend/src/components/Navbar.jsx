@@ -3,13 +3,21 @@ import React, { useState, useEffect } from 'react';
 const Navbar = () => {
     const [isDark, setIsDark] = useState(true);
     const [scrolled, setScrolled] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
 
     useEffect(() => {
+        // 1. Add transition class briefly so colors animate
+        document.documentElement.classList.add('theme-transition');
         if (isDark) {
             document.documentElement.classList.add('dark');
         } else {
             document.documentElement.classList.remove('dark');
         }
+        // 2. Remove transition class after animation completes — zero ongoing cost
+        const timer = setTimeout(() => {
+            document.documentElement.classList.remove('theme-transition');
+        }, 350);
+        return () => clearTimeout(timer);
     }, [isDark]);
 
     useEffect(() => {
@@ -17,6 +25,14 @@ const Navbar = () => {
         window.addEventListener('scroll', onScroll, { passive: true });
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
+
+    const navLinks = [
+        ['How it Works', '#how-it-works'],
+        ['Explore',       '#explore-globe'],
+        ['Product',       '#product'],
+        ['Reviews',       '#testimonials'],
+        ['Pricing',       '#pricing'],
+    ];
 
     return (
         <nav
@@ -41,32 +57,30 @@ const Navbar = () => {
                         </span>
                     </div>
 
-                    {/* Nav links */}
-                    <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-500 dark:text-slate-400">
-                        {['How it Works|#how-it-works', 'Explore|#explore-globe', 'Product|#product', 'Reviews|#testimonials', 'Pricing|#pricing'].map((item) => {
-                            const [label, href] = item.split('|');
-                            return (
-                                <a
-                                    key={href}
-                                    href={href}
-                                    className="relative group hover:text-indigo-600 dark:hover:text-cyan-400"
-                                    style={{ transition: 'color 0.2s ease' }}
-                                >
-                                    {label}
-                                    <span className="absolute -bottom-0.5 left-0 h-0.5 w-0 bg-indigo-500 rounded-full group-hover:w-full" style={{ transition: 'width 0.25s ease' }}></span>
-                                </a>
-                            );
-                        })}
+                    {/* Desktop Nav links */}
+                    <div className="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-500 dark:text-slate-400">
+                        {navLinks.map(([label, href]) => (
+                            <a
+                                key={href}
+                                href={href}
+                                onClick={() => setMenuOpen(false)}
+                                className="relative group hover:text-indigo-600 dark:hover:text-cyan-400"
+                                style={{ transition: 'color 0.2s ease' }}
+                            >
+                                {label}
+                                <span className="absolute -bottom-0.5 left-0 h-0.5 w-0 bg-indigo-500 rounded-full group-hover:w-full" style={{ transition: 'width 0.25s ease' }}></span>
+                            </a>
+                        ))}
                     </div>
 
                     {/* Actions */}
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                        {/* Dark mode toggle */}
                         <button
                             onClick={() => setIsDark(!isDark)}
                             aria-label="Toggle Dark Mode"
                             id="theme-toggle"
-                            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800"
-                            style={{ transition: 'background-color 0.2s ease' }}
+                            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
                         >
                             {isDark ? (
                                 <svg className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
@@ -78,14 +92,51 @@ const Navbar = () => {
                                 </svg>
                             )}
                         </button>
-                        <button
-                            className="hidden sm:block text-sm font-semibold px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-full shadow-md hover:scale-105 active:scale-95"
-                            style={{ transition: 'background-color 0.2s ease, transform 0.15s ease' }}
-                        >
+
+                        {/* CTA — hidden on very small screens */}
+                        <button className="hidden sm:block text-sm font-semibold px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-full shadow-md hover:scale-105 active:scale-95 transition-all">
                             Sign Up Free
+                        </button>
+
+                        {/* Mobile hamburger */}
+                        <button
+                            onClick={() => setMenuOpen(!menuOpen)}
+                            className="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+                            aria-label="Menu"
+                        >
+                            {menuOpen ? (
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            ) : (
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                                </svg>
+                            )}
                         </button>
                     </div>
                 </div>
+
+                {/* Mobile dropdown menu */}
+                {menuOpen && (
+                    <div className="md:hidden border-t border-gray-100 dark:border-slate-800 py-3 flex flex-col gap-1">
+                        {navLinks.map(([label, href]) => (
+                            <a
+                                key={href}
+                                href={href}
+                                onClick={() => setMenuOpen(false)}
+                                className="px-4 py-2.5 text-sm font-medium text-gray-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-cyan-400 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800/60 transition-colors"
+                            >
+                                {label}
+                            </a>
+                        ))}
+                        <div className="px-4 pt-2 pb-1">
+                            <button className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold rounded-xl transition-colors">
+                                Sign Up Free
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
         </nav>
     );
