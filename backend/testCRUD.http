@@ -10,8 +10,8 @@ POST http://localhost:8080/api/users/register
 Content-Type: application/json
 
 {
-  "email": "minhhoangvuduc@gmail.com",
-  "password": "test123456789"
+  "email": "test123@gmail.com",
+  "password": "test"
 }
 
 ###
