@@ -6,6 +6,7 @@ import com.vgu.tripify.domain.dto.response.TripSummaryResponse;
 import com.vgu.tripify.domain.entity.Destination;
 import com.vgu.tripify.domain.entity.Trip;
 import com.vgu.tripify.domain.entity.User;
+import com.vgu.tripify.external.AiTripGenerator;
 import com.vgu.tripify.repository.TripRepository;
 import com.vgu.tripify.repository.UserRepository;
 import com.vgu.tripify.service.TripService;
@@ -20,6 +21,7 @@ import java.util.Scanner;
 public class TripServiceImpl implements TripService {
     private final TripRepository tripRepository;
     private final UserRepository userRepository;
+    private final AiTripGenerator aiTripGenerator;
 
     @Override
     public TripDetailResponse generateTrip(Long userId, TripGenerationRequest request) {
