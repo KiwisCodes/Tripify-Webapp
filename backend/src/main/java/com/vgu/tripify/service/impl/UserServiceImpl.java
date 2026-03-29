@@ -8,15 +8,17 @@ import com.vgu.tripify.domain.enums.Role;
 import com.vgu.tripify.exception.EmailAlreadyExistsException;
 import com.vgu.tripify.repository.UserRepository;
 import com.vgu.tripify.service.UserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-//    private final PasswordEncoder passwordEncoder; later needed to encode the password
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository){
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -29,7 +31,7 @@ public class UserServiceImpl implements UserService {
         User newUser = new User();
         newUser.setEmail(request.getEmail());
 
-        newUser.setPasswordHash(request.getPassword());
+        newUser.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         newUser.setRole(Role.FREE);
         newUser.setCredits(5);
 
