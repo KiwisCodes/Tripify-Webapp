@@ -1,10 +1,14 @@
 package com.vgu.tripify.controller;
 
 import com.vgu.tripify.domain.dto.request.LoginRequest;
+import com.vgu.tripify.domain.dto.request.RegisterRequest;
 import com.vgu.tripify.domain.dto.response.AuthResponse;
+import com.vgu.tripify.domain.dto.response.UserResponse;
 import com.vgu.tripify.domain.entity.User;
 import com.vgu.tripify.repository.UserRepository;
 import com.vgu.tripify.security.JwtTokenProvider;
+import com.vgu.tripify.service.UserService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +30,7 @@ public class AuthController {
     private final UserDetailsService userDetailsService;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
+    private final UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request){
@@ -39,4 +44,13 @@ public class AuthController {
 
         return ResponseEntity.ok(new AuthResponse(token, user.getEmail(), user.getRole(), user.getCredits()));
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody RegisterRequest request) {
+        // Pass the DTO request to userService
+        UserResponse createdUser = userService.register(request);
+        // Return 201 Created status and the safe UserResponse DTO
+        return ResponseEntity.ok().body(createdUser);
+    }
+
 }

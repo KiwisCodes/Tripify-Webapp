@@ -15,14 +15,6 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody RegisterRequest request) {
-        // Pass the DTO request to userService
-        UserResponse createdUser = userService.register(request);
-        // Return 201 Created status and the safe UserResponse DTO
-        return ResponseEntity.ok().body(createdUser);
-    }
-
     @PutMapping("/update")
     public ResponseEntity<UserResponse> updateUser(@Valid @RequestBody UpdateUserRequest request) {
         UserResponse updatedUser = userService.updatePersonalDetail(request);
