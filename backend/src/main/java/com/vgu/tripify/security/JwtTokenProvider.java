@@ -44,7 +44,7 @@ public class JwtTokenProvider {
         return extractClaim(token, Claims::getSubject);
     }
 
-    // 3. Validate Token agains UserDetails
+    // 3. Validate Token against UserDetails
     public boolean validateJwtToken(String token, UserDetails userDetails) {
         String email = extractEmail(token);
         return email.equals(userDetails.getUsername()) && !isTokenExpired(token);

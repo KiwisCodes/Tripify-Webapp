@@ -8,18 +8,18 @@ import com.vgu.tripify.domain.enums.Role;
 import com.vgu.tripify.exception.EmailAlreadyExistsException;
 import com.vgu.tripify.repository.UserRepository;
 import com.vgu.tripify.service.UserService;
+import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder){
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Override
     public UserResponse register(RegisterRequest request) {
@@ -68,7 +68,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse updatePersonalDetail(UpdateUserRequest request) {
-        User user = userRepository.findByEmail(request.getEmail());
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + request.getEmail()));;
 
         if(user == null){
             throw new RuntimeException("User not found");
@@ -85,4 +86,5 @@ public class UserServiceImpl implements UserService {
         userResponse.setEmail(saveUser.getEmail());
         return userResponse;
     }
+
 }
