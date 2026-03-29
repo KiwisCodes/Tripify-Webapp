@@ -6,13 +6,24 @@ GET https://examples.http-client.intellij.net/get
 GET http://localhost:8080/
 
 ###
-POST http://localhost:8080/api/users/register
+POST http://localhost:8080/api/auth/register
 Content-Type: application/json
 
 {
-  "email": "minhhoangvuduc@gmail.com",
-  "password": "test123456789"
+  "email": "test18111@gmail.com",
+  "password": "test1234567"
 }
+
+
+###
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test18111@gmail.com",
+  "password": "test1234567"
+}
+
 
 ###
 PUT http://localhost:8080/api/users/update
