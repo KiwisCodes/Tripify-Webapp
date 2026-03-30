@@ -13,18 +13,34 @@
 }
 
 /* =============================================
-   SMOOTH DARK MODE — applied to all elements
+   SMOOTH DARK MODE — performance-safe approach
+   Only applies transitions during the 300ms toggle window.
+   JS in Navbar adds/removes `.theme-transition` on <html>.
    ============================================= */
-*, *::before, *::after {
-  transition-property: background-color, border-color, color, fill, stroke;
-  transition-duration: 300ms;
-  transition-timing-function: ease;
+.theme-transition,
+.theme-transition * {
+  transition-property: background-color, border-color, color, fill, stroke !important;
+  transition-duration: 300ms !important;
+  transition-timing-function: ease !important;
+}
+
+/* Prevent canvas and SVG from being transitioned — they manage their own rendering */
+.theme-transition canvas,
+.theme-transition svg,
+.theme-transition img {
+  transition: none !important;
+}
+
+/* Prevent horizontal overflow on all screens */
+html, body {
+  overflow-x: hidden;
 }
 
 /* But DO NOT slow down layout/transform transitions */
 .no-color-transition {
   transition: none !important;
 }
+
 
 /* =============================================
    SCROLL REVEAL SYSTEM
@@ -185,3 +201,38 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* =============================================
+   COBE GLOBE — CSS Anchor-Positioned Labels
+   Uses the native cobe v2 --cobe-{id} API.
+   ============================================= */
+.marker-label {
+  position: absolute;
+  /* Anchor to the marker's center-top using cobe's native CSS anchor API */
+  bottom: anchor(top);
+  left:   anchor(center);
+  translate: -50% 0;
+  margin-bottom: 10px;
+
+  /* Style */
+  display:         flex;
+  align-items:     center;
+  gap:             4px;
+  padding:         4px 10px;
+  background:      rgba(15, 23, 42, 0.88);
+  color:           #f1f5f9;
+  font-size:       11px;
+  font-weight:     700;
+  letter-spacing:  0.06em;
+  text-transform:  uppercase;
+  white-space:     nowrap;
+  border-radius:   6px;
+  border:          1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:      0 2px 8px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  pointer-events:  none;
+
+  /* Fade based on cobe's visibility variable */
+  transition: opacity 0.3s ease;
+}
+

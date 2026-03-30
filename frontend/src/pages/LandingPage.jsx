@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import PopularThemes from '../components/PopularThemes';
 import HowItWorks from '../components/HowItWorks';
+import GlobeSection from '../components/GlobeSection';
 import ProductShowcase from '../components/ProductShowcase';
 import Testimonials from '../components/Testimonials';
 import Pricing from '../components/Pricing';
@@ -19,6 +20,7 @@ const LandingPage = () => {
                 <Hero />
                 <PopularThemes />
                 <HowItWorks />
+                <GlobeSection />
                 <ProductShowcase />
                 <Testimonials />
                 <Pricing />

@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,7 +23,7 @@ public class Trip {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "destination_id")
     private Destination destination;
 
@@ -48,5 +49,13 @@ public class Trip {
     @JoinColumn(name = "user_id")
     @JsonBackReference // Stops the infinite JSON loop back to User
     private User user;
+
+    public void addDayItinerary(DayItinerary dayItinerary) {
+        if (this.itineraries == null) {
+            this.itineraries = new ArrayList<>();
+        }
+        this.itineraries.add(dayItinerary);
+        dayItinerary.setTrip(this);
+    }
 
 }

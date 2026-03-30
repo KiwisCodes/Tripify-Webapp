@@ -1,10 +1,8 @@
 package com.vgu.tripify.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -12,6 +10,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name="itinerary_items")
 @Data
+@ToString(exclude = {"dayItinerary"})
+@EqualsAndHashCode(exclude = {"dayItinerary"})
 @NoArgsConstructor
 public class ItineraryItem {
 
@@ -30,5 +30,6 @@ public class ItineraryItem {
     private Tip tip;
 
     @ManyToOne
+    @JsonBackReference("day-item-reference")
     private DayItinerary dayItinerary;
 }

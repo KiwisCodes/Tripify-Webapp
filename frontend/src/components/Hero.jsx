@@ -5,7 +5,7 @@ const Hero = () => {
     const { ref: heroRef } = useScrollReveal({ threshold: 0.05 });
 
     return (
-        <section className="relative pt-32 pb-16 lg:pt-48 lg:pb-24 overflow-hidden">
+        <section className="relative pt-24 pb-12 sm:pt-32 sm:pb-16 lg:pt-48 lg:pb-24 overflow-hidden">
             {/* Static gradient glow — no animation to avoid paint */}
             <div className="absolute inset-0 pointer-events-none" style={{
                 background: 'radial-gradient(ellipse 60% 50% at 50% 40%, rgba(99,102,241,0.12) 0%, transparent 70%)'
@@ -20,7 +20,7 @@ const Hero = () => {
                     AI-Powered Trip Planner
                 </div>
 
-                <h1 className="animate-fade-in-up delay-100 text-5xl lg:text-7xl font-bold tracking-tighter mb-6 bg-clip-text text-transparent bg-gradient-to-b from-gray-900 to-gray-500 dark:from-white dark:to-slate-500 leading-tight">
+                <h1 className="animate-fade-in-up delay-100 text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tighter mb-6 bg-clip-text text-transparent bg-gradient-to-b from-gray-900 to-gray-500 dark:from-white dark:to-slate-500 leading-tight">
                     Your next adventure,<br />curated by AI.
                 </h1>
                 <p className="animate-fade-in-up delay-200 text-lg text-gray-500 dark:text-slate-400 max-w-2xl mx-auto mb-12">
