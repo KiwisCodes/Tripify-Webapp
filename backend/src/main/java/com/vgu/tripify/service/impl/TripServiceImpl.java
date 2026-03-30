@@ -28,7 +28,7 @@ public class TripServiceImpl implements TripService {
     private final TripRepository tripRepository;
     private final UserRepository userRepository;
     private final AiTripGenerator aiTripGenerator;
-    private final GeocodingProvider geocodingProvider; //later
+//    private final GeocodingProvider geocodingProvider; //later
 
     @Override
     @Transactional
