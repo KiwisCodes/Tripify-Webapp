@@ -25,14 +25,15 @@ public class JwtTokenProvider {
     private long jwtExpirationMs;
 
     // 1. Generate after successful Login
-    public String generateJwtToken(UserDetails userDetails) {
+    public String generateJwtToken(CustomUserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", userDetails.getAuthorities().iterator().next().getAuthority());
+        String userId = String.valueOf(userDetails.getId());
         // getAuthorieties return a list of role
         // .iterator.next.getAuthority to get the first value of that list (assume we only have 1 role)
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(userId)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
@@ -44,10 +45,15 @@ public class JwtTokenProvider {
         return extractClaim(token, Claims::getSubject);
     }
 
+    public String extractUserId(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+
     // 3. Validate Token against UserDetails
-    public boolean validateJwtToken(String token, UserDetails userDetails) {
-        String email = extractEmail(token);
-        return email.equals(userDetails.getUsername()) && !isTokenExpired(token);
+    public boolean validateJwtToken(String token, CustomUserDetails userDetails) {
+//        String email = extractEmail(token);
+        String userId = extractUserId(token);
+        return userId.equals(String.valueOf(userDetails.getId())) && !isTokenExpired(token);
     }
 
     // 4. Extract Claim (any single claim) -> generic Helper

@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
 
-    // This allow security bean to be created without waiting for the creation of jwtFilter
+    // This allows security bean to be created without waiting for the creation of jwtFilter
     public SecurityConfig(@Lazy JwtAuthenticationFilter jwtAuthFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
     }
@@ -38,6 +38,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()   // login, register = public
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") // only for admin
+                        .requestMatchers("/api/v1/trips/**").permitAll() // allow trip generation
                         .anyRequest().authenticated() // any request must be authenticated
                 )
                 //It reads the Authorization: Bearer header, validates the JWT

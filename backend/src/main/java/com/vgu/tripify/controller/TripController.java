@@ -18,13 +18,6 @@ public class TripController {
     private final TripService tripService;
     private final CreditService creditService;
 
-//    public TripController(TripService tripService, CreditService creditService) {
-//        this.tripService = tripService;
-//        this.creditService = creditService;
-//    }
-        //we have RequiredArgsConstructor so we dont need the above anymore
-
-    //hung cmt
     @PostMapping("/{userId}")
     public ResponseEntity<TripDetailResponse> createTrip(@PathVariable Long userId, @RequestBody TripGenerationRequest request){
 //        creditService.deductCredit(userId, 1);

@@ -10,6 +10,7 @@ import java.util.List;
 public class AuthResponse {
     private String token;
     private String email;
+    private Long userId;
     private Role role;
     private int remainingCredit;
 }
