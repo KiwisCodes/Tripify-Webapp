@@ -38,23 +38,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()   // login, register = public
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") // only for admin
-                        .requestMatchers("/api/v1/trips/**").permitAll() // allow trip generation
+                        .requestMatchers("/error").permitAll() // allow spring boot to return actual exception messages
                         .anyRequest().authenticated() // any request must be authenticated
                 )
                 //It reads the Authorization: Bearer header, validates the JWT
                 // and sets the user into SecurityContextHolder
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
-    }
-
-    // since security need userServiceImpl exists to allow jwtauthentication to do the filter chain
-    // However, userServiceImpl also wait for the security to be fully created -> 2 waits -> deadlock
-    // We intentionally put UserDetailsService here, to tell Spring not to autowired it, but grab it from here
-    @Bean
-    public UserDetailsService userDetailsService(UserRepository userRepository) {
-            // Spring inject UserRepository
-        return username -> userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     @Bean

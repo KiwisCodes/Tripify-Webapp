@@ -19,7 +19,7 @@ import java.util.List;
 @Table(name="users")
 @NoArgsConstructor
 @Data
-public class User implements UserDetails {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,24 +45,4 @@ public class User implements UserDetails {
     @JsonManagedReference
     private List<Review> reviews;
 
-    // The collection is expected a return of "a list of authorities from 'role enum'"
-    // Take user role, convert it to Spring's format and give to security system
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name())); // e.g. ROLE_FREE
-    }
-
-    @Override
-    public @Nullable String getPassword() {
-        return this.passwordHash;
-    }
-
-    @Override
-    public String getUsername() {
-        return this.email;
-    }
-    @Override public boolean isAccountNonExpired() { return true; }
-    @Override public boolean isAccountNonLocked() { return true; }
-    @Override public boolean isCredentialsNonExpired() { return true; }
-    @Override public boolean isEnabled() { return true; }
 }
