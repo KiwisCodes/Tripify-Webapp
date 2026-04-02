@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/trips")
 @RequiredArgsConstructor
@@ -18,15 +20,8 @@ public class TripController {
     private final TripService tripService;
     private final CreditService creditService;
 
-//    public TripController(TripService tripService, CreditService creditService) {
-//        this.tripService = tripService;
-//        this.creditService = creditService;
-//    }
-        //we have RequiredArgsConstructor so we dont need the above anymore
-
-    //hung cmt
     @PostMapping("/{userId}")
-    public ResponseEntity<TripDetailResponse> createTrip(@PathVariable Long userId, @RequestBody TripGenerationRequest request){
+    public ResponseEntity<TripDetailResponse> createTrip(@PathVariable Long userId, @Valid @RequestBody TripGenerationRequest request){
 //        creditService.deductCredit(userId, 1);
         TripDetailResponse tripDetailResponse = tripService.generateTrip(userId, request);
         return ResponseEntity.ok().body(tripDetailResponse);
