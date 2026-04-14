@@ -1,5 +1,5 @@
 import React from 'react';
-import useScrollReveal from '../hooks/useScrollReveal';
+import Reveal from './ui/Reveal';
 
 const testimonials = [
     {
@@ -69,32 +69,27 @@ const Stars = () => (
 );
 
 const Testimonials = () => {
-    const { ref: headingRef } = useScrollReveal();
-    const { ref: gridRef } = useScrollReveal({ threshold: 0.05 });
-
     return (
         <section className="py-24 relative overflow-hidden bg-gradient-to-b from-white to-gray-50 dark:from-slate-950 dark:to-slate-900" id="testimonials">
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-100/20 dark:bg-indigo-900/10 rounded-full blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/4" />
             <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-cyan-100/20 dark:bg-cyan-900/10 rounded-full blur-3xl pointer-events-none translate-y-1/2 -translate-x-1/4" />
 
             <div className="max-w-7xl mx-auto px-4 relative">
-                <div ref={headingRef} className="reveal text-center mb-16">
+                <Reveal animation="reveal" className="text-center mb-16">
                     <p className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-500 dark:text-cyan-400 mb-3">Real Travelers. Real Results.</p>
                     <h2 className="text-3xl lg:text-4xl font-bold tracking-tight mb-4">What Our Community Says</h2>
                     <p className="text-gray-500 dark:text-slate-400 max-w-xl mx-auto">
                         Over 100,000 trips planned and counting.
                     </p>
-                </div>
+                </Reveal>
 
-                <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {testimonials.map((t, i) => (
-                        <div
+                        <Reveal
                             key={i}
-                            className="reveal group relative bg-white dark:bg-slate-900 rounded-3xl p-6 border border-gray-100 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1.5"
-                            style={{
-                                transitionDelay: `${i * 0.08}s`,
-                                transition: 'opacity 0.65s cubic-bezier(0.22,1,0.36,1), transform 0.65s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s ease, background-color 300ms ease, border-color 300ms ease',
-                            }}
+                            animation="reveal"
+                            delay={i * 0.08}
+                            className="group relative bg-white dark:bg-slate-900 rounded-3xl p-6 border border-gray-100 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300"
                         >
                             <div className="absolute top-5 right-6 text-5xl font-serif text-gray-100 dark:text-slate-800 select-none">"</div>
                             <Stars />
@@ -108,7 +103,7 @@ const Testimonials = () => {
                                     <p className="text-[11px] text-gray-400 dark:text-slate-500 truncate">{t.location} · {t.trip}</p>
                                 </div>
                             </div>
-                        </div>
+                        </Reveal>
                     ))}
                 </div>
 

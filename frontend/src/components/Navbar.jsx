@@ -21,8 +21,17 @@ const Navbar = () => {
     }, [isDark]);
 
     useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 10);
+        const onScroll = () => {
+            const isScrolled = window.scrollY > 10;
+            setScrolled(isScrolled);
+        };
+        
+        // Use passive: true to ensure scrolling is never blocked by the listener
         window.addEventListener('scroll', onScroll, { passive: true });
+        
+        // Initial check
+        onScroll();
+        
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
