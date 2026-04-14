@@ -4,7 +4,7 @@ The payment module is designed following a Service-Oriented Architecture (SOA) a
 
 **Component Responsibilities:**
 * **`PaymentController.java`**: Acts as the RESTful entry point. It handles client-side requests to initiate payments and listens for asynchronous "Server-to-Server" notifications (Webhooks) from Stripe.
-* **`PaymentService.java` & `StripePaymentServiceImpl.java`**: Follows the Bridge Pattern. The interface defines the business contract, while the implementation orchestrates the Stripe Java SDK. It manages session parameter construction, cryptographic signature verification, and atomic database updates.
+* **`PaymentService.java` & `StripePaymentServiceImpl.java`**: Follows a Service Abstraction (Strategy-ready). The interface defines the business contract, while the implementation orchestrates the Stripe Java SDK. It manages session parameter construction, cryptographic signature verification, and atomic database updates.
 * **`CreditPackage.java`**: A Domain-Specific Enum that serves as the single source of truth for pricing. It encapsulates metadata (display names, credit values, and prices in cents) required by both the internal business logic and the external Stripe API.
 * **`CheckoutResponse.java`**: A Data Transfer Object (DTO) facilitating a clean contract with the frontend (React/Angular/Vue), returning only the necessary `sessionUrl` for client-side redirection.
 * **`testCRUD.http`**: Provides an Integration Specification for developers to exercise the API endpoints using standard HTTP clients directly within the IDE (IntelliJ/VS Code).
