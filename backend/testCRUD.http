@@ -10,7 +10,7 @@ POST http://localhost:8080/api/auth/register
 Content-Type: application/json
 
 {
-  "email": "vguhoang123@gmail.com",
+  "email": "vguhoang1233@gmail.com",
   "password": "test1234567"
 }
 
@@ -35,14 +35,14 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 ### 2. Use the dynamically saved token
-POST http://localhost:8080/api/v1/trips/1
+POST http://localhost:8080/api/v1/trips/7
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
   "destinationCity": "Tokyo",
   "tripDuration": 5,
-  "budgetBracket": "LOW"
+  "budgetBracket": "MEDIUM"
 }
 ###
 PUT http://localhost:8080/api/users/update
