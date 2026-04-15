@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
-const Navbar = () => {
+import { Link } from 'react-router-dom';const Navbar = () => {
     const [isDark, setIsDark] = useState(true);
     const [scrolled, setScrolled] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
@@ -46,7 +45,7 @@ const Navbar = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16 items-center">
                     {/* Brand */}
-                    <div className="flex items-center gap-2">
+                    <Link to="/" className="flex items-center gap-2">
                         <div className="w-8 h-8 bg-gradient-to-br from-cyan-500 to-indigo-600 rounded-lg flex items-center justify-center shadow-md hover:scale-110 transition-transform duration-200">
                             <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
@@ -55,7 +54,7 @@ const Navbar = () => {
                         <span className="text-xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-cyan-500 to-indigo-600">
                             Tripify
                         </span>
-                    </div>
+                    </Link>
 
                     {/* Desktop Nav links */}
                     <div className="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-500 dark:text-slate-400">
@@ -94,9 +93,14 @@ const Navbar = () => {
                         </button>
 
                         {/* CTA — hidden on very small screens */}
-                        <button className="hidden sm:block text-sm font-semibold px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-full shadow-md hover:scale-105 active:scale-95 transition-all">
-                            Sign Up Free
-                        </button>
+                        <div className="hidden sm:flex items-center gap-3 ml-2">
+                            <Link to="/login" className="text-sm font-bold text-gray-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-cyan-400 transition-colors">
+                                Log in
+                            </Link>
+                            <Link to="/register" className="text-sm font-semibold px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-full shadow-md hover:scale-105 active:scale-95 transition-all">
+                                Sign up
+                            </Link>
+                        </div>
 
                         {/* Mobile hamburger */}
                         <button
@@ -130,10 +134,13 @@ const Navbar = () => {
                                 {label}
                             </a>
                         ))}
-                        <div className="px-4 pt-2 pb-1">
-                            <button className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold rounded-xl transition-colors">
-                                Sign Up Free
-                            </button>
+                        <div className="px-4 pt-2 pb-1 flex flex-col gap-2">
+                            <Link to="/login" onClick={() => setMenuOpen(false)} className="w-full text-center py-2.5 border-2 border-indigo-100 dark:border-slate-800 hover:bg-indigo-50 dark:hover:bg-slate-800 text-indigo-600 dark:text-indigo-400 text-sm font-bold rounded-xl transition-colors">
+                                Log in
+                            </Link>
+                            <Link to="/register" onClick={() => setMenuOpen(false)} className="w-full text-center py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold rounded-xl transition-colors">
+                                Sign up
+                            </Link>
                         </div>
                     </div>
                 )}
