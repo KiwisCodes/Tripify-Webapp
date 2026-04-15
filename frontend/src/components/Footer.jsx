@@ -1,12 +1,10 @@
 import React from 'react';
-import useScrollReveal from '../hooks/useScrollReveal';
+import Reveal from './ui/Reveal';
 
 const Footer = () => {
-    const { ref } = useScrollReveal({ threshold: 0.2 });
-
     return (
-        <footer ref={ref} className="reveal py-10 border-t border-gray-200 dark:border-slate-800">
-            <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+        <footer className="py-10 border-t border-gray-200 dark:border-slate-800">
+            <Reveal animation="reveal" className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
                 <div className="flex items-center gap-2 opacity-60 hover:opacity-100" style={{ transition: 'opacity 0.25s ease' }}>
                     <div className="w-6 h-6 bg-gradient-to-br from-cyan-500 to-indigo-600 rounded flex items-center justify-center">
                         <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -28,7 +26,7 @@ const Footer = () => {
                         </a>
                     ))}
                 </div>
-            </div>
+            </Reveal>
         </footer>
     );
 };

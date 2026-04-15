@@ -57,3 +57,25 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:8080/
+
+####
+#POST http://localhost:8080/api/trips/{{minhhoang.vuducgmail.com}}
+#Content-Type: application/json
+#
+#{
+#  "destinationCity": "Ho Chi Minh City",
+#  "budgetBracket": "LOW",
+#  "tripDuration": 7
+#}
+
+###
+DELETE http://localhost:8080/
+
+###
+POST http://localhost:8080/api/payments/create-session?userId=1
+
+
+###
+POST http://localhost:8080/api/payments/create-session?userId=1&packageType=EXPLORER
+Content-Type: application/json
+Authorization: Bearer {{authToken}}

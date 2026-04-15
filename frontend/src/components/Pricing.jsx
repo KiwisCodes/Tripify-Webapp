@@ -1,22 +1,18 @@
 import React from 'react';
-import useScrollReveal from '../hooks/useScrollReveal';
+import Reveal from './ui/Reveal';
 
 const Pricing = () => {
-    const { ref: headingRef } = useScrollReveal();
-    const { ref: cardsRef } = useScrollReveal({ threshold: 0.1 });
-
     return (
         <section className="py-24 bg-white dark:bg-slate-950" id="pricing">
             <div className="max-w-5xl mx-auto px-4">
-                <div ref={headingRef} className="reveal text-center mb-16">
+                <Reveal animation="reveal" className="text-center mb-16">
                     <p className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-500 dark:text-cyan-400 mb-3">Pricing</p>
                     <h2 className="text-3xl font-bold tracking-tight mb-4">Simple, credit-based pricing</h2>
                     <p className="text-gray-500 dark:text-slate-400">One-time purchases. No recurring monthly fees.</p>
-                </div>
-                <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                </Reveal>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* Explorer Bundle */}
-                    <div className="reveal stagger-1 p-10 rounded-[2.5rem] border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col h-full hover:shadow-xl hover:-translate-y-1.5"
-                        style={{ transition: 'box-shadow 0.3s ease, transform 0.3s ease, background-color 300ms ease, border-color 300ms ease, color 300ms ease' }}>
+                    <Reveal animation="reveal" delay={0.1} className="p-10 rounded-[2.5rem] border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col h-full hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300">
                         <div className="mb-8">
                             <h3 className="text-xl font-bold mb-2">Explorer Bundle</h3>
                             <p className="text-xs font-bold text-indigo-500 uppercase tracking-widest">One-time Purchase</p>
@@ -33,15 +29,13 @@ const Pricing = () => {
                                 </li>
                             ))}
                         </ul>
-                        <button className="w-full py-4 px-6 rounded-2xl border-2 border-gray-200 dark:border-slate-700 font-bold hover:border-indigo-400 hover:bg-gray-50 dark:hover:bg-slate-800"
-                            style={{ transition: 'border-color 0.2s ease, background-color 0.2s ease' }}>
+                        <button className="w-full py-4 px-6 rounded-2xl border-2 border-gray-200 dark:border-slate-700 font-bold hover:border-indigo-400 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors">
                             Buy 500 Credits
                         </button>
-                    </div>
+                    </Reveal>
 
                     {/* Globetrotter Pack */}
-                    <div className="reveal stagger-3 relative p-10 rounded-[2.5rem] bg-white dark:bg-slate-900 flex flex-col h-full shadow-2xl scale-[1.03] hover:-translate-y-1.5 before:absolute before:inset-[-2px] before:bg-gradient-to-b before:from-cyan-400 before:to-indigo-600 before:-z-10 before:rounded-[2.6rem]"
-                        style={{ transition: 'transform 0.3s ease, box-shadow 0.3s ease, border-color 300ms, background-color 300ms, color 300ms' }}>
+                    <Reveal animation="reveal" delay={0.2} className="relative p-10 rounded-[2.5rem] bg-white dark:bg-slate-900 flex flex-col h-full shadow-2xl scale-[1.03] hover:-translate-y-1.5 before:absolute before:inset-[-2px] before:bg-gradient-to-b before:from-cyan-400 before:to-indigo-600 before:-z-10 before:rounded-[2.6rem] transition-all duration-300">
                         <div className="absolute -top-4 left-1/2 px-6 py-1 bg-gradient-to-r from-cyan-500 to-indigo-600 text-white text-[10px] font-bold uppercase tracking-widest rounded-full shadow-lg"
                             style={{ transform: 'translateX(-50%)' }}>
                             Best Value
@@ -67,11 +61,10 @@ const Pricing = () => {
                                 </li>
                             ))}
                         </ul>
-                        <button className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-cyan-500 via-indigo-600 to-indigo-700 text-white font-extrabold shadow-xl linear-glow hover:opacity-90 active:scale-95"
-                            style={{ transition: 'opacity 0.2s ease, transform 0.15s ease' }}>
+                        <button className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-cyan-500 via-indigo-600 to-indigo-700 text-white font-extrabold shadow-xl linear-glow hover:opacity-90 active:scale-95 transition-all">
                             Buy 5,000 Credits
                         </button>
-                    </div>
+                    </Reveal>
                 </div>
             </div>
         </section>

@@ -2,12 +2,11 @@ package com.vgu.tripify.domain.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class CheckoutResponse {
-    private String sessionId;
-
-    // Secure Stripe URL -> allow user enter their credit card
-    private String checkOutUrl;
+    private String sessionUrl; // The URL React will redirect the user to
 }

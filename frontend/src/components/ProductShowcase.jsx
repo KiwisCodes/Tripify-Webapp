@@ -1,24 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
+import Reveal from './ui/Reveal';
 
 const ProductShowcase = () => {
-    const cardRef = useRef(null);
-
-    // Scroll reveal logic
-    useEffect(() => {
-        const el = cardRef.current;
-        if (!el) return;
-        const observer = new IntersectionObserver(([entry]) => {
-            if (entry.isIntersecting) {
-                el.classList.add('is-visible');
-                el.style.opacity = '1';
-                el.style.transform = 'translateY(0)';
-                observer.unobserve(el);
-            }
-        }, { threshold: 0.1 });
-        observer.observe(el);
-        return () => observer.disconnect();
-    }, []);
-
     return (
         <section
             className="relative w-full overflow-hidden flex items-center bg-[#f8fafc] dark:bg-slate-900 py-20 md:py-32"
@@ -42,9 +25,9 @@ const ProductShowcase = () => {
             />
 
             <div className="container mx-auto px-4 sm:px-6 max-w-7xl relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16">
-                
+
                 {/* ── Left Side: Content ── */}
-                <div className="w-full lg:w-1/2 text-center lg:text-left">
+                <Reveal animation="reveal-left" className="w-full lg:w-1/2 text-center lg:text-left">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs font-bold uppercase tracking-widest mb-6">
                         <span className="relative flex h-2 w-2">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
@@ -59,7 +42,7 @@ const ProductShowcase = () => {
                     <p className="text-lg text-slate-600 dark:text-slate-400 max-w-xl mx-auto lg:mx-0 leading-relaxed mb-10">
                         Stop juggling tabs and spreadsheets. Our AI handles the logistics, generating comprehensive itineraries including route optimization, cost estimates, and local hidden gems.
                     </p>
-                    
+
                     <div className="flex flex-wrap justify-center lg:justify-start gap-4">
                         <button className="px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-950 font-bold rounded-2xl hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors shadow-xl">
                             Try It Out
@@ -68,13 +51,13 @@ const ProductShowcase = () => {
                             Watch Demo
                         </button>
                     </div>
-                </div>
+                </Reveal>
 
                 {/* ── Right Side: Itinerary Card ── */}
                 <div className="w-full lg:w-1/2 flex justify-center lg:justify-end">
-                    <div
-                        ref={cardRef}
-                        className="w-full max-w-sm transition-all duration-1000 ease-out translate-y-12 opacity-0"
+                    <Reveal
+                        animation="reveal-scale"
+                        className="w-full max-w-sm"
                     >
                         {/* Enhanced Float Animation with CSS */}
                         <style dangerouslySetInnerHTML={{ __html: `
@@ -85,10 +68,11 @@ const ProductShowcase = () => {
                             }
                             .float-animation {
                                 animation: float-card 6s ease-in-out infinite;
+                                will-change: transform;
                             }
                         `}} />
 
-                        <div className="float-animation bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-[2.5rem] border border-slate-200/50 dark:border-slate-800/50 shadow-[0_30px_60px_rgba(0,0,0,0.12)] dark:shadow-[0_30px_60px_rgba(0,0,0,0.4)] overflow-hidden flex flex-col">
+                        <div className="float-animation bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200/50 dark:border-slate-800/50 shadow-[0_30px_60px_rgba(0,0,0,0.12)] dark:shadow-[0_30px_60px_rgba(0,0,0,0.4)] overflow-hidden flex flex-col">
                             <div className="p-8 md:p-10">
                                 <div className="mb-8 relative">
                                     <div className="flex items-center gap-2 text-indigo-600 dark:text-cyan-400 mb-4 font-mono text-[11px] uppercase tracking-[0.2em] font-black">
@@ -102,7 +86,7 @@ const ProductShowcase = () => {
                                 <div className="space-y-0 relative">
                                     {/* Vertical Timeline Path */}
                                     <div className="absolute left-[7px] top-6 bottom-12 w-[2px] bg-slate-100 dark:bg-slate-800 z-0"></div>
-                                    
+
                                     {[
                                         { color: 'bg-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.5)]', time: '09:00 AM', place: 'Tsukiji Market', note: 'Freshest sushi globally.' },
                                         { color: 'bg-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.5)]', time: '01:00 PM', place: 'Meiji Jingu', note: 'Shinto forest shrine.' },
@@ -150,7 +134,7 @@ const ProductShowcase = () => {
                                 </button>
                             </div>
                         </div>
-                    </div>
+                    </Reveal>
                 </div>
             </div>
         </section>
