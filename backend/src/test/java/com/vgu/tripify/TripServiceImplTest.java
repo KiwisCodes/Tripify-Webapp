@@ -81,6 +81,9 @@ class TripServiceImplTest {
 
         when(tripRepository.save(any(Trip.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
+        // Mock geocoding
+        when(geocodingProvider.geocode(anyString())).thenReturn(new com.vgu.tripify.external.helperClass.Coordinate(48.8606, 2.3376));
+
         // ==========================================
         // ACT
         // ==========================================
@@ -90,8 +93,12 @@ class TripServiceImplTest {
         // ASSERT
         // ==========================================
         assertNotNull(response);
+        assertEquals(48.8606, response.getDayItineraries().get(0).getItems().get(0).getLatitude());
+        assertEquals(2.3376, response.getDayItineraries().get(0).getItems().get(0).getLongitude());
+
         verify(tripRepository, times(1)).save(any(Trip.class));
         verify(userRepository, times(1)).findById(fakeUserId);
         verify(aiTripGenerator, times(1)).generateItinerary("Tokyo", 3, BudgetBracket.MEDIUM);
+        verify(geocodingProvider, atLeastOnce()).geocode(anyString());
     }
 }

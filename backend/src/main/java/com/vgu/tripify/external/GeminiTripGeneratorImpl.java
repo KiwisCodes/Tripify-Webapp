@@ -58,6 +58,7 @@ public class GeminiTripGeneratorImpl implements AiTripGenerator {
     }
     """.formatted(duration, city, budget);
 
+
         Map<String, Object> requestBody = Map.of(
                 "contents", List.of(
                         Map.of("parts", List.of(Map.of("text", prompt)))

@@ -71,6 +71,23 @@ const InteractiveGlobe = ({ className = "" }) => {
     };
 
     useEffect(() => {
+        const canvas = canvasRef.current;
+        
+        // Use passive touch listeners to not block scrolling
+        const onTouchStart = (e) => {
+            if (e.touches[0]) pointerInteracting.current = e.touches[0].clientX - pointerInteractionMovement.current;
+        };
+        const onTouchMove = (e) => {
+            if (pointerInteracting.current !== null && e.touches[0]) {
+                pointerInteractionMovement.current = (e.touches[0].clientX - pointerInteracting.current) * 0.01;
+            }
+        };
+        const onTouchEnd = () => { pointerInteracting.current = null; };
+
+        canvas?.addEventListener('touchstart', onTouchStart, { passive: true });
+        canvas?.addEventListener('touchmove', onTouchMove, { passive: true });
+        canvas?.addEventListener('touchend', onTouchEnd, { passive: true });
+
         const timer = setTimeout(() => {
             buildGlobe(document.documentElement.classList.contains('dark'));
         }, 100);
@@ -86,6 +103,9 @@ const InteractiveGlobe = ({ className = "" }) => {
         return () => {
             clearTimeout(timer);
             themeObserver.disconnect();
+            canvas?.removeEventListener('touchstart', onTouchStart);
+            canvas?.removeEventListener('touchmove', onTouchMove);
+            canvas?.removeEventListener('touchend', onTouchEnd);
             if (rafRef.current)   cancelAnimationFrame(rafRef.current);
             if (globeRef.current) { globeRef.current.destroy(); globeRef.current = null; }
         };
@@ -113,6 +133,7 @@ const InteractiveGlobe = ({ className = "" }) => {
                         transition: 'opacity 0.8s ease',
                         cursor:   'grab',
                         display:  'block',
+                        touchAction: 'pan-y' // Allow vertical scrolling over the canvas
                     }}
                     onPointerDown={(e) => {
                         pointerInteracting.current = e.clientX - pointerInteractionMovement.current;
@@ -131,15 +152,6 @@ const InteractiveGlobe = ({ className = "" }) => {
                             pointerInteractionMovement.current = (e.clientX - pointerInteracting.current) * 0.01;
                         }
                     }}
-                    onTouchStart={(e) => {
-                        if (e.touches[0]) pointerInteracting.current = e.touches[0].clientX - pointerInteractionMovement.current;
-                    }}
-                    onTouchMove={(e) => {
-                        if (pointerInteracting.current !== null && e.touches[0]) {
-                            pointerInteractionMovement.current = (e.touches[0].clientX - pointerInteracting.current) * 0.01;
-                        }
-                    }}
-                    onTouchEnd={() => { pointerInteracting.current = null; }}
                 />
 
                 {/*
@@ -154,6 +166,7 @@ const InteractiveGlobe = ({ className = "" }) => {
                         style={{
                             positionAnchor: `--cobe-${city.id}`,
                             opacity: `var(--cobe-visible-${city.id}, 0)`,
+                            // Backdrop blur is removed in index.css for marker-label
                         }}
                     >
                         <span style={{ fontSize: '10px', marginRight: 3 }}>{city.emoji}</span>

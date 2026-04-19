@@ -11,6 +11,7 @@ import com.vgu.tripify.domain.dto.response.TripSummaryResponse;
 import com.vgu.tripify.domain.entity.*;
 import com.vgu.tripify.external.AiTripGenerator;
 import com.vgu.tripify.external.GeocodingProvider;
+import com.vgu.tripify.external.helperClass.Coordinate;
 import com.vgu.tripify.repository.TripRepository;
 import com.vgu.tripify.repository.UserRepository;
 import com.vgu.tripify.service.TripService;
@@ -28,7 +29,7 @@ public class TripServiceImpl implements TripService {
     private final TripRepository tripRepository;
     private final UserRepository userRepository;
     private final AiTripGenerator aiTripGenerator;
-//    private final GeocodingProvider geocodingProvider; //later
+    private final GeocodingProvider geocodingProvider;
 
     @Override
     @Transactional
@@ -73,8 +74,17 @@ public class TripServiceImpl implements TripService {
                 itemEntity.setPlaceType(itemDto.placeType());
                 itemEntity.setDescription(itemDto.description());
 
+                // Fetch Coordinates (Geocoding)
+                String query = itemDto.placeName() + ", " + request.getDestinationCity();
+                Coordinate coordinate = geocodingProvider.geocode(query);
+                if (coordinate != null) {
+                    itemEntity.setLatitude(coordinate.getLatitude());
+                    itemEntity.setLongitude(coordinate.getLongitude());
+                }
+
                 // Link Item to Day (Parent)
                 dayEntity.addItineraryItem(itemEntity);
+
             }
         }
 
@@ -120,6 +130,8 @@ public class TripServiceImpl implements TripService {
                                     ItineraryItemResponse itemDto = new ItineraryItemResponse();
                                     itemDto.setPlaceName(item.getPlaceName());
                                     itemDto.setPlaceType(item.getPlaceType());
+                                    itemDto.setLatitude(item.getLatitude());
+                                    itemDto.setLongitude(item.getLongitude());
                                     return itemDto;
                                 }).toList());
                         return dayDto;

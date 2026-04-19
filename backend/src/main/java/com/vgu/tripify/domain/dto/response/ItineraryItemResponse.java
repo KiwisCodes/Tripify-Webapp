@@ -8,7 +8,7 @@ public class ItineraryItemResponse {
     private String placeType; // Attraction , FOOD, HOTEL
 
     // MAP Coordinates
-    private Double lattitude;
+    private Double latitude;
     private Double longitude;
 
     // Route Line

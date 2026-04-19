@@ -1,5 +1,5 @@
 import React from 'react';
-import useScrollReveal from '../hooks/useScrollReveal';
+import Reveal from './ui/Reveal';
 
 const themes = [
     {
@@ -33,12 +33,9 @@ const themes = [
 ];
 
 const PopularThemes = () => {
-    const { ref: headingRef } = useScrollReveal();
-    const { ref: rowRef } = useScrollReveal({ threshold: 0.05 });
-
     return (
         <section className="py-12 overflow-hidden">
-            <div ref={headingRef} className="reveal max-w-7xl mx-auto px-4 mb-8">
+            <Reveal animation="reveal" className="max-w-7xl mx-auto px-4 mb-8">
                 <div className="flex items-end justify-between">
                     <div>
                         <p className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-500 dark:text-cyan-400 mb-1">Curated Journeys</p>
@@ -46,15 +43,14 @@ const PopularThemes = () => {
                     </div>
                     <span className="hidden md:block text-sm text-gray-400 dark:text-slate-500">Scroll to explore →</span>
                 </div>
-            </div>
+            </Reveal>
 
-            <div
-                ref={rowRef}
-                className="reveal flex gap-6 overflow-x-auto px-4 md:px-[calc((100vw-80rem)/2)] no-scrollbar pb-8"
-            >
+            <div className="flex gap-6 overflow-x-auto px-4 md:px-[calc((100vw-80rem)/2)] no-scrollbar pb-8">
                 {themes.map((theme, index) => (
-                    <div
+                    <Reveal
                         key={index}
+                        animation="reveal"
+                        delay={index * 0.12}
                         className="min-w-[320px] md:min-w-[400px] aspect-[4/5] rounded-3xl overflow-hidden relative group cursor-pointer shrink-0 shadow-lg"
                     >
                         <img
@@ -67,8 +63,7 @@ const PopularThemes = () => {
                         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
 
                         {/* Price badge */}
-                        <div className="absolute top-5 right-5 px-3 py-1 bg-black/30 rounded-full text-white text-sm font-bold border border-white/20"
-                            style={{ backdropFilter: 'blur(8px)' }}>
+                        <div className="absolute top-5 right-5 px-3 py-1 bg-black/60 rounded-full text-white text-sm font-bold border border-white/20">
                             {theme.price}
                         </div>
 
@@ -79,8 +74,7 @@ const PopularThemes = () => {
                                 style={{ transition: 'opacity 0.35s ease' }}>
                                 {theme.description}
                             </p>
-                            <div className="flex items-center gap-3 text-[11px] font-semibold text-white/90 uppercase tracking-wider py-2 px-3 bg-white/10 rounded-xl border border-white/10"
-                                style={{ backdropFilter: 'blur(6px)' }}>
+                            <div className="flex items-center gap-3 text-[11px] font-semibold text-white/90 uppercase tracking-wider py-2 px-3 bg-black/40 rounded-xl border border-white/10">
                                 {theme.details.map((detail, idx) => (
                                     <React.Fragment key={idx}>
                                         <span>{detail}</span>
@@ -89,7 +83,7 @@ const PopularThemes = () => {
                                 ))}
                             </div>
                         </div>
-                    </div>
+                    </Reveal>
                 ))}
             </div>
         </section>

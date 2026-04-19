@@ -51,63 +51,58 @@ html, body {
 .reveal {
   opacity: 0;
   transform: translateY(28px);
-  transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
-  /* Override the * rule for non-color transitions */
+  transition-duration: 0.65s;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   transition-property: opacity, transform, background-color, border-color, color;
+  will-change: transform, opacity; /* Hardware acceleration */
 }
 
 /* Visible state — element itself is observed */
 .reveal.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-/* Visible state — parent container is observed, children reveal */
-.is-visible .reveal {
-  opacity: 1;
-  transform: translateY(0);
+  opacity: 1 !important;
+  transform: translateY(0) !important;
 }
 
 /* Slide from left */
 .reveal-left {
   opacity: 0;
   transform: translateX(-36px);
-  transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-              background-color 300ms ease, border-color 300ms ease, color 300ms ease;
+  transition-duration: 0.65s;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  transition-property: opacity, transform, background-color, border-color, color;
+  will-change: transform, opacity;
 }
-.reveal-left.is-visible,
-.is-visible .reveal-left {
-  opacity: 1;
-  transform: translateX(0);
+.reveal-left.is-visible {
+  opacity: 1 !important;
+  transform: translateX(0) !important;
 }
 
 /* Slide from right */
 .reveal-right {
   opacity: 0;
   transform: translateX(36px);
-  transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-              background-color 300ms ease, border-color 300ms ease, color 300ms ease;
+  transition-duration: 0.65s;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  transition-property: opacity, transform, background-color, border-color, color;
+  will-change: transform, opacity;
 }
-.reveal-right.is-visible,
-.is-visible .reveal-right {
-  opacity: 1;
-  transform: translateX(0);
+.reveal-right.is-visible {
+  opacity: 1 !important;
+  transform: translateX(0) !important;
 }
 
 /* Scale + fade */
 .reveal-scale {
   opacity: 0;
   transform: scale(0.94);
-  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-              background-color 300ms ease, border-color 300ms ease, color 300ms ease;
+  transition-duration: 0.6s;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  transition-property: opacity, transform, background-color, border-color, color;
+  will-change: transform, opacity;
 }
-.reveal-scale.is-visible,
-.is-visible .reveal-scale {
-  opacity: 1;
-  transform: scale(1);
+.reveal-scale.is-visible {
+  opacity: 1 !important;
+  transform: scale(1) !important;
 }
 
 /* Stagger delays for children */
@@ -198,10 +193,6 @@ html, body {
   }
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 /* =============================================
    COBE GLOBE — CSS Anchor-Positioned Labels
    Uses the native cobe v2 --cobe-{id} API.
@@ -219,7 +210,7 @@ html {
   align-items:     center;
   gap:             4px;
   padding:         4px 10px;
-  background:      rgba(15, 23, 42, 0.88);
+  background:      rgba(15, 23, 42, 0.92);
   color:           #f1f5f9;
   font-size:       11px;
   font-weight:     700;
@@ -229,7 +220,6 @@ html {
   border-radius:   6px;
   border:          1px solid rgba(255, 255, 255, 0.1);
   box-shadow:      0 2px 8px rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(6px);
   pointer-events:  none;
 
   /* Fade based on cobe's visibility variable */
