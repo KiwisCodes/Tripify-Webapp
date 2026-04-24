@@ -29,7 +29,9 @@ public class TripServiceImpl implements TripService {
     private final TripRepository tripRepository;
     private final UserRepository userRepository;
     private final AiTripGenerator aiTripGenerator;
-    private final GeocodingProvider geocodingProvider;
+    private final GeocodingProvider locationIQGeocodingProvider;
+
+//    private final GeocodingProvider nominatimGeocodingProvider;
 
     @Override
     @Transactional
@@ -67,7 +69,7 @@ public class TripServiceImpl implements TripService {
 
             // Link Day to Trip (Parent)
             trip.addDayItinerary(dayEntity);
-
+            int numberOfLocation = 0;
             for (AiItineraryItemDto itemDto : dayDto.itineraryItems()) {
                 ItineraryItem itemEntity = new ItineraryItem();
                 itemEntity.setPlaceName(itemDto.placeName());
@@ -76,7 +78,8 @@ public class TripServiceImpl implements TripService {
 
                 // Fetch Coordinates (Geocoding)
                 String query = itemDto.placeName() + ", " + request.getDestinationCity();
-                Coordinate coordinate = geocodingProvider.geocode(query);
+                System.out.println(query);
+                Coordinate coordinate = locationIQGeocodingProvider.geocode(query);
                 if (coordinate != null) {
                     itemEntity.setLatitude(coordinate.getLatitude());
                     itemEntity.setLongitude(coordinate.getLongitude());
@@ -84,7 +87,15 @@ public class TripServiceImpl implements TripService {
 
                 // Link Item to Day (Parent)
                 dayEntity.addItineraryItem(itemEntity);
-
+                numberOfLocation++;
+                // Pause to prevent Rate Limited
+//                if(numberOfLocation % 2 == 0){
+//                    try{
+//                        Thread.sleep(1000);
+//                    } catch (InterruptedException e) {
+//                        Thread.currentThread().interrupt();
+//                    }
+//                }
             }
         }
 
