@@ -4,8 +4,15 @@ import { Link } from 'react-router-dom';
 
 export default function Navbar() {
   const [isDark, setIsDark] = useState(true);
+  const [credits, setCredits] = useState(0);
 
   useEffect(() => {
+    // Get credits from localStorage
+    const savedCredits = localStorage.getItem('credits');
+    if (savedCredits) {
+      setCredits(savedCredits);
+    }
+
     document.documentElement.classList.add('theme-transition');
     if (isDark) {
       document.documentElement.classList.add('dark');
@@ -53,7 +60,7 @@ export default function Navbar() {
         <div className="flex items-center space-x-2 bg-indigo-50 dark:bg-indigo-500/10 rounded-full px-4 py-2 border border-indigo-100 dark:border-indigo-500/20 group cursor-pointer transition-all hover:bg-indigo-100 dark:hover:bg-indigo-500/20 shadow-sm">
           <div className="flex flex-col items-end">
             <span className="text-[10px] font-bold text-indigo-400 dark:text-indigo-500 uppercase tracking-wider leading-none">Credits</span>
-            <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400">0</span>
+            <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400">{credits}</span>
           </div>
           <Coins className="w-4 h-4 text-amber-500 flex-shrink-0" />
         </div>

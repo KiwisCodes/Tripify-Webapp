@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, ArrowRight, Apple, Globe, User } from "lucide-react";
 import Reveal from "../components/ui/Reveal";
+import api from "../api/axios";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export default function Register() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setIsLoading(true);
@@ -34,16 +35,27 @@ export default function Register() {
       return;
     }
 
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match.");
+    if (formData.password.length < 8) {
+      setError("Password must be at least 8 characters long.");
       setIsLoading(false);
       return;
     }
 
-    setTimeout(() => {
+    try {
+      // API call to the backend
+      await api.post('/auth/register', { 
+        name: formData.fullName, 
+        email: formData.email, 
+        password: formData.password 
+      });
+      alert("Registration successful! Please login.");
+      navigate("/login");
+    } catch (err) {
+      console.error("Registration failed", err);
+      setError(err.response?.data?.message || "Registration failed. Please check your inputs.");
+    } finally {
       setIsLoading(false);
-      navigate("/dashboard");
-    }, 1200);
+    }
   };
 
   return (

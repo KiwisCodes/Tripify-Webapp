@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, ArrowRight, Apple, Globe } from "lucide-react";
 import Reveal from "../components/ui/Reveal";
+import api from "../api/axios";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ export default function Login() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setIsLoading(true);
@@ -24,10 +25,17 @@ export default function Login() {
       return;
     }
 
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      const res = await api.post('/auth/login', formData);
+      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('credits', res.data.remainingCredit);
       navigate("/dashboard");
-    }, 1200);
+    } catch (err) {
+      console.error("Login failed", err);
+      setError("Invalid email or password.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

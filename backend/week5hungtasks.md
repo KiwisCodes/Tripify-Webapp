@@ -1,6 +1,6 @@
 # Week 5: Full-Stack Authentication Integration Guide
 
-This guide details how to securely connect your React frontend to your Spring Boot backend for production-ready deployment.
+This guide details how to securely connect your React frontend to your Spring Boot backend. 
 
 ---
 
@@ -21,6 +21,10 @@ This guide details how to securely connect your React frontend to your Spring Bo
 *   **Request Interceptor:** Automatically adds the JWT token from `localStorage` to the `Authorization` header of every outgoing request.
 *   **Response Interceptor:** Watches for `401 Unauthorized` errors. If found, it clears the token and redirects the user to login, handling expired sessions gracefully.
 
+### D. Spring MVC & Beans
+*   **@Configuration & @Bean:** Allows you to define objects (like `RestTemplate` or `WebMvcConfigurer`) that Spring manages and injects into your services automatically.
+*   **@Value:** A way to inject configuration values from `application.properties` into your Java variables, making your code environment-agnostic.
+
 ---
 
 ## 2. Backend Implementation (Spring Boot)
@@ -34,8 +38,8 @@ Update your configuration to allow cross-origin requests using a dynamic propert
 @Configuration
 public class RestConfig {
 
-    // Inject frontend URL from application.properties (defaults to localhost)
-    @Value("${app.frontend.url:http://localhost:5173}")
+    // Inject frontend URL from application.properties
+    @Value("${app.frontend.url}")
     private String frontendUrl;
 
     @Bean
@@ -43,13 +47,14 @@ public class RestConfig {
         return new RestTemplate();
     }
 
+    // CORS configuration to trust the frontend based on the dynamic URL
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins(frontendUrl) // Dynamic origin
+                        .allowedOrigins(frontendUrl) 
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
@@ -59,12 +64,18 @@ public class RestConfig {
 }
 ```
 
+**File:** `backend/src/main/resources/application.properties`
+Add this property:
+```properties
+app.frontend.url=http://localhost:5173
+```
+
 ---
 
 ## 3. Frontend Implementation (React)
 
 ### Step 2: Configure Centralized API Client
-Use `import.meta.env` to ensure your app automatically switches between local and production URLs.
+Use `axios` for all backend requests. This centralizes URL configuration and authentication handling.
 
 **File:** `frontend/src/api/axios.js`
 
@@ -72,18 +83,20 @@ Use `import.meta.env` to ensure your app automatically switches between local an
 import axios from 'axios';
 
 const api = axios.create({
-  // Vite automatically reads this from .env or deployment settings
+  // Vite looks for the VITE_API_URL in .env (or environment variables in production)
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080/api',
 });
 
-// Request Interceptor: Attach JWT token
+// Request Interceptor: Attach JWT token to every request automatically
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
   return config;
 });
 
-// Response Interceptor: Handle expired sessions (401)
+// Response Interceptor: Optional (Redirect on session expire)
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -98,51 +111,64 @@ api.interceptors.response.use(
 export default api;
 ```
 
+**File:** `frontend/.env`
+```text
+VITE_API_URL=http://localhost:8080/api
+```
+
 ---
 
-## 4. Connection Logic & Auth Strategies
+## 4. Implementation Logic
 
-### Step 3: Implement Auth Logic
-Use the `api` instance from `axios.js`.
+### Step 3: Connect Pages to API
+Import the `api` client and use it for authentication.
 
 **Register Logic (`frontend/src/pages/Register.jsx`):**
 ```javascript
-import api from '../api/axios';
+import api from "../api/axios";
 
-const handleRegister = async (formData) => {
+// Inside Register.jsx:
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  // ... validation ...
   try {
-    await api.post('/auth/register', formData);
+    await api.post('/auth/register', { 
+        name: formData.fullName, 
+        email: formData.email, 
+        password: formData.password 
+    });
     alert("Registration successful!");
+    navigate("/login");
   } catch (err) {
-    alert(err.response?.data?.message || "Registration failed");
+    setError(err.response?.data?.message || "Registration failed.");
   }
 };
 ```
 
 **Login Logic (`frontend/src/pages/Login.jsx`):**
 ```javascript
-import api from '../api/axios';
+import api from "../api/axios";
 
-const handleLogin = async (formData) => {
+// Inside Login.jsx:
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  // ... validation ...
   try {
     const res = await api.post('/auth/login', formData);
+    // JWT received from backend is stored in localStorage
     localStorage.setItem('token', res.data.token);
-    window.location.href = '/dashboard';
+    navigate("/dashboard");
   } catch (err) {
-    alert("Invalid email or password");
+    setError("Invalid email or password.");
   }
 };
 ```
-
-### Step 4: Advanced Scalability Patterns
-1.  **State Persistence:** Don't rely solely on `localStorage`. Use **React Context** to keep `isAuthenticated` synced across your app.
-2.  **Route Protection:** Wrap your dashboard routes in `ProtectedRoute.jsx`. It should check the context, and if `!isAuthenticated`, redirect to `/login`.
 
 ---
 
 ## 5. Deployment Readiness
 
-1.  **Local Environment:** Ensure `frontend/.env` contains `VITE_API_URL=http://localhost:8080/api`. Ensure `.env` is in your `.gitignore`.
-2.  **Cloud Deployment:**
-    *   On your frontend hosting platform (Vercel/Render/etc.), set the Environment Variable `VITE_API_URL` to your live backend API URL.
-    *   On your backend hosting platform, set the environment property `app.frontend.url` to your live frontend website URL.
+1.  **Git Safety:** Ensure `.env` is added to your `.gitignore` to prevent secret/config leaks.
+2.  **Environment Variables:** On your hosting platform (Render/Vercel/etc.), set the actual production URLs in the dashboard settings.
+    *   Backend (Render): Set `APP_FRONTEND_URL` to your production frontend URL.
+    *   Frontend (Vercel): Set `VITE_API_URL` to your production backend URL.

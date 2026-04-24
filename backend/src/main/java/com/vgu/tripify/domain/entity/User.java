@@ -28,7 +28,7 @@ public class User {
     private Role role;
     private String firstName;
     private String lastName;
-    private Integer credits = 5;//start with 5 credits for ex
+    private Integer credits = 500;//start with 5 credits for ex
     private String passwordHash;
 
     // 1 User -> Many Trips

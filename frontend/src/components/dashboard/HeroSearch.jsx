@@ -5,8 +5,9 @@ export default function HeroSearch() {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
+    // We use relative positioning so the container respects the flow and layout of the parent
     <div className={`transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${isCollapsed ? 'w-14' : 'w-[320px]'}`}>
-      <div className="relative group">
+      <div className="relative group pointer-events-auto">
         
         {/* Toggle Button - Centered Right */}
         {!isCollapsed && (
@@ -111,3 +112,4 @@ export default function HeroSearch() {
     </div>
   );
 }
+
