@@ -34,9 +34,14 @@ public class TripServiceImpl implements TripService {
     @Override
     @Transactional
     public TripDetailResponse generateTrip(Long userId, TripGenerationRequest request) {
-        // 1. VERIFY THE USER
+        // 1. VERIFY THE USER AND CHECK CREDITS
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
+        int cost = 5;
+        if (user.getCredits() < cost) {
+            throw new RuntimeException("Insufficient credits. Required: " + cost + ", Available: " + user.getCredits());
+        }
 
         // 2. GENERATE THE DATA WITH AI (Now returns the DTO "Envelope")
         AiTripResponseDto aiData = aiTripGenerator.generateItinerary(
@@ -92,7 +97,11 @@ public class TripServiceImpl implements TripService {
         // CascadeType.ALL handles the saving of destination, days, and items automatically.
         Trip savedTrip = tripRepository.save(trip);
 
-        // 7. RETURN THE RESULT
+        // 7. REDUCE CREDITS AND SAVE USER
+        user.setCredits(user.getCredits() - cost);
+        userRepository.save(user);
+
+        // 8. RETURN THE RESULT
         return mapToTripDetailResponse(savedTrip);
     }
 

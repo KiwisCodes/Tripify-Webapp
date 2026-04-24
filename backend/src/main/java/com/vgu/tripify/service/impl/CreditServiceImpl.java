@@ -1,10 +1,16 @@
 package com.vgu.tripify.service.impl;
 
+import com.vgu.tripify.domain.entity.User;
+import com.vgu.tripify.repository.UserRepository;
 import com.vgu.tripify.service.CreditService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class CreditServiceImpl implements CreditService {
+
+    private final UserRepository userRepository;
 
     @Override
     public void deductCredit(Long userId, int amount){
@@ -18,6 +24,8 @@ public class CreditServiceImpl implements CreditService {
 
     @Override
     public int getCredit(Long userId){
-        return 0;
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return user.getCredits();
     }
 }

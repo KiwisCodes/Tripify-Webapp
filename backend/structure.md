@@ -8,65 +8,68 @@ A Spring Boot 4.x application (Java 21) for trip planning and management, integr
 ├── src/                                # Source code
 │   ├── main/
 │   │   ├── java/com/vgu/tripify/
-│   │   │   ├── TripifyApplication.java # Main entry point & root controller
+│   │   │   ├── TripifyApplication.java # Main entry point
 │   │   │   ├── config/                 # Application configuration
-│   │   │   │   └── RestConfig.java     # Configuration for REST clients/CORS
+│   │   │   │   └── RestConfig.java     # Bean configuration for RestTemplate/CORS
 │   │   │   ├── controller/             # REST API Endpoints
 │   │   │   │   ├── AuthController.java # Authentication (Login/Register)
-│   │   │   │   ├── CreditController.java # User credit/points management
-│   │   │   │   ├── PaymentController.java # Transaction & payment processing
+│   │   │   │   ├── CreditController.java # User credit management
+│   │   │   │   ├── PaymentController.java # Stripe & Webhook processing
 │   │   │   │   ├── ReviewController.java # Trip/Destination reviews
-│   │   │   │   ├── TripController.java # Core trip management & generation
+│   │   │   │   ├── TripController.java # Core trip generation logic
 │   │   │   │   └── UserController.java # User profile management
 │   │   │   ├── domain/                 # Core domain models
 │   │   │   │   ├── dto/                # Data Transfer Objects
-│   │   │   │   │   ├── external/       # Mapping for third-party API responses (Gemini, etc.)
-│   │   │   │   │   ├── request/        # Input payloads for API requests
+│   │   │   │   │   ├── external/       # Gemini API mapping (Records & JSON envelopes)
+│   │   │   │   │   ├── request/        # Validated input payloads (Register, TripGen, etc.)
 │   │   │   │   │   └── response/       # Structured API response payloads
-│   │   │   │   ├── entity/             # JPA Entities (Database schema mapping)
-│   │   │   │   │   ├── Trip.java       # Core trip record
-│   │   │   │   │   ├── User.java       # User account details
-│   │   │   │   │   ├── Destination.java # Location/POI data
-│   │   │   │   │   └── ...             # Other supporting entities (Review, Payment, etc.)
-│   │   │   │   └── enums/              # Shared enumerations (Roles, BudgetBrackets)
-│   │   │   ├── exception/              # Error handling
-│   │   │   │   ├── GlobalExceptionHandler.java # Centralized API error responses
-│   │   │   │   └── ...                 # Custom application exceptions
-│   │   │   ├── external/               # Integration with 3rd-party services
-│   │   │   │   ├── AiTripGenerator.java # Interface for AI trip logic
-│   │   │   │   ├── GeminiTripGeneratorImpl.java # Google Gemini AI implementation
-│   │   │   │   ├── GeocodingProvider.java # Interface for coordinate lookup
-│   │   │   │   ├── NominatimGeocodingProvider.java # OpenStreetMap Nominatim implementation
-│   │   │   │   ├── RoutingProvider.java # Interface for pathfinding logic
-│   │   │   │   ├── OsrmRoutingProvider.java # OSRM routing implementation
-│   │   │   │   └── helperClass/        # Utility classes for external integrations
+│   │   │   │   ├── entity/             # JPA Entities (PostgreSQL mapping)
+│   │   │   │   │   ├── Trip.java       # Parent entity for itineraries
+│   │   │   │   │   ├── User.java       # User & Credit balance
+│   │   │   │   │   ├── DayItinerary.java # One-to-Many child of Trip
+│   │   │   │   │   ├── ItineraryItem.java # Individual stops/locations
+│   │   │   │   │   ├── CostEstimate.java # AI-generated budget details
+│   │   │   │   │   └── ...             # Review, Destination, Tip, PaymentTransaction
+│   │   │   │   └── enums/              # Enumerations (BudgetBracket, CreditPackage, Role)
+│   │   │   ├── exception/              # Global Error Handling
+│   │   │   │   ├── GlobalExceptionHandler.java # @RestControllerAdvice for JSON errors
+│   │   │   │   └── EmailAlreadyExistsException.java
+│   │   │   ├── external/               # 3rd-Party Service Strategies
+│   │   │   │   ├── AiTripGenerator.java # Interface for AI logic
+│   │   │   │   ├── GeminiTripGeneratorImpl.java # Gemini 1.5 Flash implementation
+│   │   │   │   ├── GeocodingProvider.java # Interface for Lat/Lon lookup
+│   │   │   │   ├── NominatimGeocodingProvider.java # OpenStreetMap implementation
+│   │   │   │   ├── RoutingProvider.java # Interface for pathfinding
+│   │   │   │   ├── OsrmRoutingProvider.java # Open Source Routing Machine impl
+│   │   │   │   └── helperClass/        # Coordinate and RouteResult utilities
 │   │   │   ├── repository/             # Spring Data JPA Repositories
-│   │   │   │   ├── TripRepository.java # Database operations for Trips
-│   │   │   │   └── UserRepository.java # Database operations for Users
-│   │   │   ├── security/               # Authentication & Authorization logic
-│   │   │   │   ├── JwtTokenProvider.java # JWT generation and validation
-│   │   │   │   └── JwtAuthenticationFilter.java # Security filter for JWT processing
-│   │   │   └── service/                # Business logic layer
-│   │   │       ├── TripService.java    # Core business logic interface
-│   │   │       ├── impl/               # Service implementations
-│   │   │       │   ├── TripServiceImpl.java # Logic for trip planning and management
-│   │   │       │   └── ...             # Other service implementations
-│   │   │       └── ...                 # Other service interfaces (User, Payment, etc.)
-│   │   └── resources/                  # App configuration (application.properties, etc.)
-│   └── test/                           # Unit and Integration tests
-│       └── java/com/vgu/tripify/       # Test cases for services and controllers
-├── docker-compose.yml                  # Infrastructure setup (PostgreSQL, etc.)
-├── pom.xml                             # Maven project dependencies and build config
-├── progress.md                         # Project development status and roadmap
-├── testCRUD.http                       # HTTP client file for manual API testing
-├── week3tasks.md                       # Task list for development week 3
-└── mvnw                                # Maven wrapper executable
+│   │   │   │   ├── TripRepository.java 
+│   │   │   │   └── UserRepository.java 
+│   │   │   ├── security/               # Security & Identity
+│   │   │   │   ├── JwtTokenProvider.java # JWT generation/validation
+│   │   │   │   ├── JwtAuthenticationFilter.java # Stateless filter
+│   │   │   │   ├── SecurityConfig.java # SecurityFilterChain & @Lazy injection
+│   │   │   │   └── CustomUserDetailService.java # DB-to-Security bridge
+│   │   │   └── service/                # Business Logic Layer
+│   │   │       ├── TripService.java    
+│   │   │       ├── impl/               # Implementations
+│   │   │       │   ├── TripServiceImpl.java # "Stitching" AI DTOs to JPA Entities
+│   │   │       │   ├── StripePaymentServiceImpl.java # Secure Stripe Webhook logic
+│   │   │       │   └── ...             # AuthService, CreditService, UserServiceImpl
+│   │   └── resources/                  
+│   └── test/                           
+│       └── java/com/vgu/tripify/       # TripServiceImplTest, ApplicationTests
+├── docker-compose.yml                  # Postgres 15 & pgAdmin orchestration
+├── pom.xml                             # Java 21, Spring Boot 4.0.4, Lombok, Stripe
+├── interview.md                        # Technical deep-dive & interview prep guide
+├── progress.md                         # Roadmap and task tracking
+└── testCRUD.http                       # Manual REST testing suite
 ```
 
-## Key Components
+## Architecture & Integration Highlights
 
-- **AI Integration**: Uses Google Gemini to generate dynamic travel itineraries.
-- **Location Services**: Integrates with Nominatim (Geocoding) and OSRM (Routing).
-- **Security**: Stateless authentication using JWT.
-- **Database**: Managed via Spring Data JPA with PostgreSQL.
-- **Validation**: Strict input validation using Jakarta Bean Validation.
+- **Monolith / Layered Architecture**: Clear separation of Web, Service, Data, and Security layers.
+- **AI Engine**: Gemini 1.5 Flash integration using Prompt Discipline and Jackson Record parsing.
+- **Strategy Pattern**: Used for Geocoding and Routing to ensure system extensibility.
+- **Stripe Payments**: Webhook-based asynchronous credit fulfillment with signature verification.
+- **Modern Stack**: Java 21 (Records, Text Blocks), Spring Boot 4.x, and Dockerized Infrastructure.
