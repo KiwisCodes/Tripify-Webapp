@@ -106,7 +106,6 @@ public class TripServiceImpl implements TripService {
         // 7. RETURN THE RESULT
         return mapToTripDetailResponse(savedTrip);
     }
-
     @Override
     public TripDetailResponse getTripById(Long userId, Long tripId) {
         return null;

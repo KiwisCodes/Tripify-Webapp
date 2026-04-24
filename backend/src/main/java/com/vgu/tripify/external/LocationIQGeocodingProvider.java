@@ -8,8 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
-
-import java.util.Arrays;
+import io.github.bucket4j.Bandwidth;
+import io.github.bucket4j.Bucket;
+import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
@@ -21,9 +22,18 @@ public class LocationIQGeocodingProvider implements GeocodingProvider {
 
     private String baseUrl = "https://us1.locationiq.com/v1/search";
 
+    private final Bucket bucket = Bucket.builder()
+            .addLimit(Bandwidth.builder()
+                    .capacity(2)
+                    .refillGreedy(1, Duration.ofSeconds(1))
+                    .build())
+            .build();
+
     @Override
     public Coordinate geocode(String query) {
-        URI uri = UriComponentsBuilder.fromUriString(baseUrl)
+        try{
+            bucket.asBlocking().consume(1); // auto pause if no token available
+            URI uri = UriComponentsBuilder.fromUriString(baseUrl)
                 .queryParam("key", key)
                 .queryParam("q", query)
                 .queryParam("format", "json")
@@ -33,7 +43,6 @@ public class LocationIQGeocodingProvider implements GeocodingProvider {
                 .toUri();
         // Using URI so that the restTemplate will skip the encoding process
         // If we use String -> restTemplate will encode to URI again -> double encoding
-        try{
             LocationIqResponse[] response = restTemplate.getForObject(uri, LocationIqResponse[].class);
             // restTemplate -> allow to send get request to external API and then automatically map that to locationIqResponse class
             if (response != null && response.length > 0) {
