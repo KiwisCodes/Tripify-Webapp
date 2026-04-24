@@ -20,7 +20,7 @@ public class LocationIQGeocodingProvider implements GeocodingProvider {
     @Value("${locationiq.api.key}")
     private String key;
 
-    private String baseUrl = "https://us1.locationiq.com/v1/search";
+    private String baseUrl = "https://eu1.locationiq.com/v1/search";
 
     private final Bucket bucket = Bucket.builder()
             .addLimit(Bandwidth.builder()
