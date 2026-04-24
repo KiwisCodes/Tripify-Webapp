@@ -25,7 +25,7 @@ public class LocationIQGeocodingProvider implements GeocodingProvider {
     private final Bucket bucket = Bucket.builder()
             .addLimit(Bandwidth.builder()
                     .capacity(2)
-                    .refillGreedy(1, Duration.ofSeconds(1))
+                    .refillGreedy(1, Duration.ofSeconds(1)) // refill the bucket 1 token / second
                     .build())
             .build();
 
