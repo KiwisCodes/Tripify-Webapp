@@ -1,23 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';const Navbar = () => {
-    const [isDark, setIsDark] = useState(true);
+import { Link } from 'react-router-dom';
+import { useTheme } from '../context/ThemeContext';
+
+const Navbar = () => {
+    const { isDark, toggleTheme } = useTheme();
     const [scrolled, setScrolled] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
-
-    useEffect(() => {
-        // 1. Add transition class briefly so colors animate
-        document.documentElement.classList.add('theme-transition');
-        if (isDark) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-        // 2. Remove transition class after animation completes — zero ongoing cost
-        const timer = setTimeout(() => {
-            document.documentElement.classList.remove('theme-transition');
-        }, 350);
-        return () => clearTimeout(timer);
-    }, [isDark]);
 
     useEffect(() => {
         const onScroll = () => {
@@ -85,7 +73,7 @@ import { Link } from 'react-router-dom';const Navbar = () => {
                     <div className="flex items-center gap-2 sm:gap-3">
                         {/* Dark mode toggle */}
                         <button
-                            onClick={() => setIsDark(!isDark)}
+                            onClick={toggleTheme}
                             aria-label="Toggle Dark Mode"
                             id="theme-toggle"
                             className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"

@@ -1,5 +1,5 @@
-import React from 'react';
-import { MapContainer, TileLayer, Marker, Tooltip } from 'react-leaflet';
+import React, { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, Marker, Tooltip, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Maximize2, Plus, Minus } from 'lucide-react';
@@ -20,35 +20,27 @@ const customIcon = new L.divIcon({
   iconAnchor: [16, 32],
 });
 
-// Source of truth for dynamic markers
-const currentDestinations = [
-  {
-    id: 1,
-    name: "Eiffel Tower",
-    pos: [48.8584, 2.2945],
-    image: "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?q=80&w=800&auto=format&fit=crop",
-    category: "Landmark",
-    rating: "4.9",
-    description: "Iconic iron lattice tower on the Champ de Mars, a global cultural icon of France."
-  },
-  {
-    id: 2,
-    name: "Louvre Museum",
-    pos: [48.8606, 2.3376],
-    image: "https://images.unsplash.com/photo-1491156855053-9cdff72c7f85?q=80&w=800&auto=format&fit=crop",
-    category: "Museum",
-    rating: "4.8",
-    description: "The world's largest art museum and a historic monument in Paris."
-  }
-];
+// Component to handle map view updates
+function MapRefocus({ markers }) {
+  const map = useMap();
+  useEffect(() => {
+    // Filter markers to only include valid coordinates
+    const validMarkers = markers.filter(m => m.pos[0] != null && m.pos[1] != null);
+    if (validMarkers.length > 0) {
+      const bounds = L.latLngBounds(validMarkers.map(m => m.pos));
+      map.fitBounds(bounds, { padding: [50, 50] });
+    }
+  }, [markers, map]);
+  return null;
+}
 
-export default function DashboardMap() {
-  const mapCenter = [48.8566, 2.3522]; // Paris default
+export default function DashboardMap({ markers = [] }) {
+  const defaultCenter = [48.8566, 2.3522]; // Paris fallback
 
   return (
-    <div className="relative w-full h-full min-h-[500px] rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white dark:border-white/10 group">
+    <div className="relative w-full h-full min-h-[500px] overflow-hidden group">
       <MapContainer 
-        center={mapCenter} 
+        center={defaultCenter} 
         zoom={13} 
         zoomControl={false}
         className="w-full h-full z-0 grayscale-[0.2] contrast-[1.1]"
@@ -58,24 +50,28 @@ export default function DashboardMap() {
           url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
         />
         
-        {currentDestinations.map((dest) => (
-          <Marker key={dest.id} position={dest.pos} icon={customIcon}>
-            <Tooltip 
-              direction="auto" 
-              offset={[0, -10]} 
-              opacity={1} 
-              className="custom-leaflet-tooltip"
-              sticky={false}
-            >
-              <MapHoverCard 
-                name={dest.name}
-                image={dest.image}
-                description={dest.description}
-                rating={dest.rating}
-                category={dest.category}
-              />
-            </Tooltip>
-          </Marker>
+        <MapRefocus markers={markers} />
+
+        {markers.map((dest, index) => (
+          dest.pos[0] != null && dest.pos[1] != null ? (
+            <Marker key={`${dest.day}-${index}`} position={dest.pos} icon={customIcon}>
+              <Tooltip 
+                direction="auto" 
+                offset={[0, -10]} 
+                opacity={1} 
+                className="custom-leaflet-tooltip"
+                sticky={false}
+              >
+                <div className="bg-white dark:bg-slate-900 rounded-xl p-3 shadow-xl border border-slate-100 dark:border-white/10 min-w-[150px]">
+                  <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest mb-1">
+                    Day {dest.day} · {dest.time}
+                  </p>
+                  <h4 className="font-bold text-slate-900 dark:text-white text-sm">{dest.name}</h4>
+                  <p className="text-[10px] text-slate-500 mt-1 uppercase font-bold">{dest.category}</p>
+                </div>
+              </Tooltip>
+            </Marker>
+          ) : null
         ))}
       </MapContainer>
 
@@ -106,7 +102,7 @@ export default function DashboardMap() {
         </div>
       </div>
       
-      <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_80px_rgba(0,0,0,0.05)] dark:shadow-[inset_0_0_80px_rgba(0,0,0,0.2)] rounded-[3rem]"></div>
+      <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_80px_rgba(0,0,0,0.05)] dark:shadow-[inset_0_0_80px_rgba(0,0,0,0.2)]"></div>
     </div>
   );
 }

@@ -1,29 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { Coins, User, Bell, Sun, Moon } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTheme } from '../../context/ThemeContext';
 
-export default function Navbar() {
-  const [isDark, setIsDark] = useState(true);
+export default function Navbar({ refreshTrigger }) {
+  const { isDark, toggleTheme } = useTheme();
   const [credits, setCredits] = useState(0);
 
   useEffect(() => {
-    // Get credits from localStorage
-    const savedCredits = localStorage.getItem('credits');
-    if (savedCredits) {
-      setCredits(savedCredits);
-    }
-
-    document.documentElement.classList.add('theme-transition');
-    if (isDark) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-    const timer = setTimeout(() => {
-      document.documentElement.classList.remove('theme-transition');
-    }, 350);
-    return () => clearTimeout(timer);
-  }, [isDark]);
+    const fetchCredits = async () => {
+      try {
+        // In a real app, use the actual authenticated user ID
+        const data = await tripService.getCredits(1); 
+        setCredits(data);
+      } catch (err) {
+        console.error("Failed to fetch credits:", err);
+      }
+    };
+    fetchCredits();
+  }, [refreshTrigger]);
 
   return (
     <nav className="relative z-50 flex items-center justify-between py-6 px-4 md:px-8 max-w-7xl mx-auto transition-all duration-300">
@@ -50,7 +45,7 @@ export default function Navbar() {
       <div className="flex items-center space-x-2 md:space-x-4">
         {/* Dark Mode Toggle */}
         <button
-          onClick={() => setIsDark(!isDark)}
+          onClick={toggleTheme}
           className="p-2.5 bg-white dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 rounded-xl text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-white/10 transition-all shadow-sm"
           aria-label="Toggle Dark Mode"
         >

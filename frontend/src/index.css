@@ -22,6 +22,7 @@
   transition-property: background-color, border-color, color, fill, stroke !important;
   transition-duration: 300ms !important;
   transition-timing-function: ease !important;
+  transition-delay: 0ms !important;
 }
 
 /* Prevent canvas and SVG from being transitioned — they manage their own rendering */
@@ -53,7 +54,7 @@ html, body {
   transform: translateY(28px);
   transition-duration: 0.65s;
   transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-  transition-property: opacity, transform, background-color, border-color, color;
+  transition-property: opacity, transform;
   will-change: transform, opacity; /* Hardware acceleration */
 }
 
@@ -69,7 +70,7 @@ html, body {
   transform: translateX(-36px);
   transition-duration: 0.65s;
   transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-  transition-property: opacity, transform, background-color, border-color, color;
+  transition-property: opacity, transform;
   will-change: transform, opacity;
 }
 .reveal-left.is-visible {
@@ -83,7 +84,7 @@ html, body {
   transform: translateX(36px);
   transition-duration: 0.65s;
   transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-  transition-property: opacity, transform, background-color, border-color, color;
+  transition-property: opacity, transform;
   will-change: transform, opacity;
 }
 .reveal-right.is-visible {
@@ -97,7 +98,7 @@ html, body {
   transform: scale(0.94);
   transition-duration: 0.6s;
   transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-  transition-property: opacity, transform, background-color, border-color, color;
+  transition-property: opacity, transform;
   will-change: transform, opacity;
 }
 .reveal-scale.is-visible {

@@ -41,6 +41,7 @@ const Reveal = ({
   className = "",
 }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [isDone, setIsDone] = useState(false);
   const ref = useRef(null);
 
   useEffect(() => {
@@ -72,10 +73,20 @@ const Reveal = ({
     };
   }, []);
 
+  // Once visible, wait for the animation duration (approx 650ms) then remove delay
+  useEffect(() => {
+    if (isVisible) {
+      const timer = setTimeout(() => {
+        setIsDone(true);
+      }, (delay * 1000) + 700);
+      return () => clearTimeout(timer);
+    }
+  }, [isVisible, delay]);
+
   return (
     <div
       ref={ref}
-      style={{ transitionDelay: `${delay}s` }}
+      style={!isDone ? { transitionDelay: `${delay}s` } : {}}
       className={`${animation} ${isVisible ? 'is-visible' : ''} ${className}`}
     >
       {children}

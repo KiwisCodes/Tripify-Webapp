@@ -34,8 +34,8 @@ const HowItWorks = () => {
                 {/* Heading */}
                 <Reveal animation="reveal" className="text-center mb-20">
                     <p className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-500 dark:text-cyan-400 mb-3">How It Works</p>
-                    <h2 className="text-3xl font-bold tracking-tight mb-4">From Spark to Sensation</h2>
-                    <p className="text-gray-500 dark:text-slate-400">Three steps to your dream vacation.</p>
+                    <h2 className="text-3xl font-bold tracking-tight mb-4 text-slate-900 dark:text-white">From Spark to Sensation</h2>
+                    <p className="text-slate-600 dark:text-slate-400">Three steps to your dream vacation.</p>
                 </Reveal>
 
                 {/* Steps */}
@@ -55,8 +55,8 @@ const HowItWorks = () => {
                                     style={{ transition: 'transform 0.25s ease' }}>
                                     {step.icon}
                                 </div>
-                                <h3 className="text-xl font-bold mb-4">{step.title}</h3>
-                                <p className="text-sm text-gray-500 dark:text-slate-400 leading-relaxed max-w-xs">{step.description}</p>
+                                <h3 className="text-xl font-bold mb-4 text-black dark:text-white">{step.title}</h3>
+                                <p className="text-sm text-black dark:text-slate-400 leading-relaxed max-w-xs">{step.description}</p>
                             </Reveal>
                         ))}
                     </div>
