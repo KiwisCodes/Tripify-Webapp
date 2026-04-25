@@ -39,7 +39,7 @@ const PopularThemes = () => {
                 <div className="flex items-end justify-between">
                     <div>
                         <p className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-500 dark:text-cyan-400 mb-1">Curated Journeys</p>
-                        <h2 className="text-2xl font-bold tracking-tight">Popular Adventure Themes</h2>
+                        <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Popular Adventure Themes</h2>
                     </div>
                     <span className="hidden md:block text-sm text-gray-400 dark:text-slate-500">Scroll to explore →</span>
                 </div>

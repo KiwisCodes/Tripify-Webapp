@@ -18,7 +18,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
-//@ControllerAdvice //when to use this and when not?
+@ControllerAdvice //when to use this and when not?
 public class GeminiTripGeneratorImpl implements AiTripGenerator {
     private final RestTemplate restTemplate;
     @Value("${gemini.api.key}")
@@ -65,15 +65,25 @@ public class GeminiTripGeneratorImpl implements AiTripGenerator {
           "days": [
             {
               "dayNumber": 1,
+              "dayTheme": "Theme of the day",
               "itineraryItems": [
                 {
-                  "placeName": "Brandenburg Gate",
-                  "placeType": "Landmark",
-                  "description": "Start your morning at this iconic 18th century neoclassical monument in the heart of Berlin."
+                  "placeName": "Place Name",
+                  "placeType": "Landmark/Food/Hotel",
+                  "time": "09:00 AM",
+                  "description": "Short description"
                 }
               ]
             }
-          ]
+          ],
+          "estimatedCosts": {
+            "hotelPerNight": 100,
+            "foodPerDay": 50,
+            "activityPerDay": 30,
+            "transportPerDay": 20,
+            "currency": "$",
+            "budgetNotes": "Brief AI tip about this budget"
+          }
         }
         """.formatted(city, duration, budget);
 
