@@ -6,6 +6,7 @@ import Register from './pages/Register'
 import ProtectedRoute from './components/routing/ProtectedRoute'
 import PublicRoute from './components/routing/PublicRoute'
 
+
 function App() {
   return (
     <Router>
@@ -21,10 +22,9 @@ function App() {
           <Route path="/register" element={<Register />} />
 
         {/* Protected Routes (only for authenticated users) */}
-        {/* <Route element={<ProtectedRoute />}>
+        <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
-        </Route> */}
-        <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
       </Routes>
     </Router>
   )

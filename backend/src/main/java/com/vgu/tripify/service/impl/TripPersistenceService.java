@@ -25,6 +25,7 @@ public class TripPersistenceService {
     public TripDetailResponse saveAndMapTrip(User user, TripGenerationRequest request, AiTripResponseDto aiData, Map<String, Coordinate> coordinateCache) {
 
         // 4. BUILD THE DESTINATION
+        // TODO: Adding guard to check if destination has existed in the database -> reuse it
         // might need to check if destination exist
         Destination destination = new Destination();
         destination.setCityName(request.getDestinationCity());
