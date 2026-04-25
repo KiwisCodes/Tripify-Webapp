@@ -42,26 +42,40 @@ public class TripServiceImpl implements TripService {
             throw new RuntimeException("Insufficient credits. Required: " + cost + ", Available: " + user.getCredits());
         }
 
-        // 2. GENERATE THE DATA WITH AI (Now returns the DTO "Envelope")
-        AiTripResponseDto aiData = aiTripGenerator.generateItinerary(
-                request.getDestinationCity(),
-                request.getTripDuration(),
-                request.getBudgetBracket()
-        );
+        try {
+            // 2. GENERATE THE DATA WITH AI
+            AiTripResponseDto aiData = aiTripGenerator.generateItinerary(
+                    request.getDestinationCity(),
+                    request.getTripDuration(),
+                    request.getBudgetBracket()
+            );
 
-        // 3. Geocode all locations generated from Gemini
-        Map<String, Coordinate> coordinateCache = new HashMap<>();
-        for(AiDayItineraryDto dayDto : aiData.days()){
-            for(AiItineraryItemDto itemDto : dayDto.itineraryItems()){
-                String query = itemDto.placeName() + ", " + request.getDestinationCity();
-                Coordinate coordinate = locationIQGeocodingProvider.geocode(query);
-                if(coordinate != null){
-                    coordinateCache.put(query, coordinate);
+            // 3. Geocode all locations
+            Map<String, Coordinate> coordinateCache = new HashMap<>();
+            for (AiDayItineraryDto dayDto : aiData.days()) {
+                for (AiItineraryItemDto itemDto : dayDto.itineraryItems()) {
+                    String query = itemDto.placeName() + ", " + request.getDestinationCity();
+                    Coordinate coordinate = locationIQGeocodingProvider.geocode(query);
+                    if (coordinate != null) {
+                        coordinateCache.put(query, coordinate);
+                    }
                 }
             }
+
+            // 4. Save and Map (Persistence)
+            TripDetailResponse response = tripPersistenceService.saveAndMapTrip(user, request, aiData, coordinateCache);
+
+            // 5. Deduct Credits only if successful
+            user.setCredits(user.getCredits() - cost);
+            userRepository.save(user);
+
+            return response;
+
+        } catch (Exception e) {
+            System.err.println("CRITICAL ERROR during trip generation: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Internal Service Error: " + e.getMessage(), e);
         }
-        // Use another Java Class / Object to create to allow Proxy to handle transactional action
-        return tripPersistenceService.saveAndMapTrip(user, request, aiData, coordinateCache);
     }
 
     @Override

@@ -77,7 +77,7 @@ const Testimonials = () => {
             <div className="max-w-7xl mx-auto px-4 relative">
                 <Reveal animation="reveal" className="text-center mb-16">
                     <p className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-500 dark:text-cyan-400 mb-3">Real Travelers. Real Results.</p>
-                    <h2 className="text-3xl lg:text-4xl font-bold tracking-tight mb-4">What Our Community Says</h2>
+                    <h2 className="text-3xl lg:text-4xl font-bold tracking-tight mb-4 text-slate-900 dark:text-white">What Our Community Says</h2>
                     <p className="text-gray-500 dark:text-slate-400 max-w-xl mx-auto">
                         Over 100,000 trips planned and counting.
                     </p>
@@ -93,14 +93,14 @@ const Testimonials = () => {
                         >
                             <div className="absolute top-5 right-6 text-5xl font-serif text-gray-100 dark:text-slate-800 select-none">"</div>
                             <Stars />
-                            <p className="text-sm text-gray-600 dark:text-slate-400 leading-relaxed mb-5 relative z-10">"{t.text}"</p>
+                            <p className="text-sm text-black dark:text-slate-400 leading-relaxed mb-5 relative z-10">"{t.text}"</p>
                             <div className="flex items-center gap-3 border-t border-gray-100 dark:border-slate-800 pt-4">
                                 <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${t.color} flex items-center justify-center text-white text-xs font-bold shrink-0`}>
                                     {t.initials}
                                 </div>
                                 <div className="min-w-0">
-                                    <p className="text-sm font-bold truncate">{t.name}</p>
-                                    <p className="text-[11px] text-gray-400 dark:text-slate-500 truncate">{t.location} · {t.trip}</p>
+                                    <p className="text-sm font-bold truncate text-black dark:text-white">{t.name}</p>
+                                    <p className="text-[11px] text-black/60 dark:text-slate-500 truncate">{t.location} · {t.trip}</p>
                                 </div>
                             </div>
                         </Reveal>

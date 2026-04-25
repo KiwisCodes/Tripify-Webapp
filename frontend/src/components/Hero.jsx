@@ -2,6 +2,14 @@ import React from 'react';
 import Reveal from './ui/Reveal';
 
 const Hero = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
+        console.log('Generating trip with:', data);
+        // Add navigation or API call here
+    };
+
     return (
         <section className="relative pt-24 pb-12 sm:pt-32 sm:pb-16 lg:pt-48 lg:pb-24 overflow-hidden">
             {/* Static gradient glow — no animation to avoid paint */}
@@ -27,24 +35,27 @@ const Hero = () => {
                     </p>
 
                     {/* Search bar */}
-                    <div className="animate-fade-in-up delay-300 w-full max-w-4xl mx-auto bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 p-2 rounded-3xl lg:rounded-full shadow-2xl flex flex-col lg:flex-row items-center gap-2">
+                    <form 
+                        onSubmit={handleSubmit}
+                        className="animate-fade-in-up delay-300 w-full max-w-4xl mx-auto bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 p-2 rounded-3xl lg:rounded-full shadow-2xl flex flex-col lg:flex-row items-center gap-2"
+                    >
                         <div className="flex-1 w-full px-6 py-3 text-left border-b lg:border-b-0 lg:border-r border-gray-100 dark:border-slate-800">
                             <label className="block text-[10px] uppercase tracking-widest font-bold text-gray-400 dark:text-slate-500 mb-1">Destination</label>
-                            <input className="w-full bg-transparent border-none p-0 focus:ring-0 text-sm text-gray-800 dark:text-slate-200 placeholder-gray-400 dark:placeholder-slate-600 outline-none" placeholder="Where to?" type="text" />
+                            <input name="destination" className="w-full bg-transparent border-none p-0 focus:ring-0 text-sm text-gray-800 dark:text-slate-200 placeholder-gray-400 dark:placeholder-slate-600 outline-none" placeholder="Where to?" type="text" required />
                         </div>
                         <div className="flex-1 w-full px-6 py-3 text-left border-b lg:border-b-0 lg:border-r border-gray-100 dark:border-slate-800">
                             <label className="block text-[10px] uppercase tracking-widest font-bold text-gray-400 dark:text-slate-500 mb-1">Length</label>
-                            <input className="w-full bg-transparent border-none p-0 focus:ring-0 text-sm text-gray-800 dark:text-slate-200 placeholder-gray-400 dark:placeholder-slate-600 outline-none" placeholder="How many days?" type="text" />
+                            <input name="length" className="w-full bg-transparent border-none p-0 focus:ring-0 text-sm text-gray-800 dark:text-slate-200 placeholder-gray-400 dark:placeholder-slate-600 outline-none" placeholder="How many days?" type="text" required />
                         </div>
                         <div className="flex-1 w-full px-6 py-3 text-left">
                             <label className="block text-[10px] uppercase tracking-widest font-bold text-gray-400 dark:text-slate-500 mb-1">Budget</label>
-                            <input className="w-full bg-transparent border-none p-0 focus:ring-0 text-sm text-gray-800 dark:text-slate-200 placeholder-gray-400 dark:placeholder-slate-600 outline-none" placeholder="Approx budget?" type="text" />
+                            <input name="budget" className="w-full bg-transparent border-none p-0 focus:ring-0 text-sm text-gray-800 dark:text-slate-200 placeholder-gray-400 dark:placeholder-slate-600 outline-none" placeholder="Approx budget?" type="text" required />
                         </div>
-                        <button className="w-full lg:w-auto px-8 py-4 bg-gradient-to-r from-cyan-500 to-indigo-600 text-white font-bold rounded-2xl lg:rounded-full linear-glow whitespace-nowrap hover:from-cyan-400 hover:to-indigo-500 active:scale-95"
-                            style={{ transition: 'opacity 0.2s ease, transform 0.15s ease' }}>
+                        <button type="submit" className="w-full lg:w-auto px-8 py-4 bg-gradient-to-r from-cyan-500 to-indigo-600 text-white font-bold rounded-2xl lg:rounded-full linear-glow whitespace-nowrap hover:from-cyan-400 hover:to-indigo-500 active:scale-[0.98] transition-all"
+                            style={{ transition: 'background-color 0.2s ease, transform 0.15s ease' }}>
                             Generate My Trip ✈️
                         </button>
-                    </div>
+                    </form>
 
                     <p className="animate-fade-in-up delay-400 mt-8 text-xs text-gray-400 dark:text-slate-600">
                         Trusted by <span className="font-bold text-indigo-500">100,000+</span> travelers worldwide
