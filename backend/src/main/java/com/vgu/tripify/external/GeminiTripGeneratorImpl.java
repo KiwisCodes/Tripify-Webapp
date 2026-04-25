@@ -34,29 +34,48 @@ public class GeminiTripGeneratorImpl implements AiTripGenerator {
         // Note: I updated the prompt to ask for an OBJECT with a "days" key
         // to match our AiTripResponseDto record.
         String prompt = """
-    You are a professional travel agent.
-    Generate a %d day trip itinerary to %s with a %s budget.
-    
-    CRITICAL INSTRUCTIONS:
-    - Return ONLY a raw JSON object.
-    - Do not include markdown formatting or ```json blocks.
-    
-    The JSON must exactly match this strict format:
-    {
-      "days": [
+        You are a professional travel agent and local expert for %s.
+        Generate a %d-day trip itinerary with a %s budget.
+        
+        CRITICAL OUTPUT RULES:
+        - Return ONLY a raw JSON object. No markdown, no ```json blocks, no explanations.
+        - Any response that is not pure JSON will be rejected.
+        
+        STRICT PLACE NAME RULES (most important):
+        - Use the OFFICIAL, SPECIFIC name of the location only (e.g. "Brandenburg Gate" not "Famous gate near the park")
+        - Only letters, numbers, spaces, and commas are allowed in placeName
+        - NO special characters: no parentheses (), no hyphens -, no slashes /, no quotes, no ampersands &
+        - NO vague or generic names like "Local restaurant", "City center walk", "Dinner around Mitte", "Street food area"
+        - placeName must be a real, searchable landmark, restaurant, museum, park, or venue
+        - placeName must not exceed 50 characters
+        - If a place name contains "&", replace it with "and"
+        - If a place name contains "-", replace it with a space
+        
+        DESCRIPTION RULES:
+        - description must be 1-2 sentences max
+        - description must not exceed 200 characters
+        
+        ITINERARY RULES:
+        - Each day must have exactly 4 to 5 itinerary items
+        - Items should follow a logical time order: morning, late morning, lunch, afternoon, evening
+        - Cover a variety of place types: landmarks, restaurants, museums, parks, entertainment
+        
+        The JSON must exactly match this format:
         {
-          "dayNumber": 1,
-          "itineraryItems": [
-            { 
-              "placeName": "The Louvre",
-              "placeType": "Museum",
-              "description": "Spend the morning exploring classic art."
+          "days": [
+            {
+              "dayNumber": 1,
+              "itineraryItems": [
+                {
+                  "placeName": "Brandenburg Gate",
+                  "placeType": "Landmark",
+                  "description": "Start your morning at this iconic 18th century neoclassical monument in the heart of Berlin."
+                }
+              ]
             }
           ]
         }
-      ]
-    }
-    """.formatted(duration, city, budget);
+        """.formatted(city, duration, budget);
 
 
         Map<String, Object> requestBody = Map.of(

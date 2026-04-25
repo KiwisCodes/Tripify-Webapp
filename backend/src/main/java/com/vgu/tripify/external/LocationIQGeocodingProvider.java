@@ -46,7 +46,6 @@ public class LocationIQGeocodingProvider implements GeocodingProvider {
             LocationIqResponse[] response = restTemplate.getForObject(uri, LocationIqResponse[].class);
             // restTemplate -> allow to send get request to external API and then automatically map that to locationIqResponse class
             if (response != null && response.length > 0) {
-                System.out.println("Found location: "+ response[0].getDisplayName());
                 double latitude = Double.parseDouble(response[0].getLatitude());
                 double longitude = Double.parseDouble(response[0].getLongitude());
                 return new Coordinate(latitude, longitude);
