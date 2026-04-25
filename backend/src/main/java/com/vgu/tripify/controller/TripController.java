@@ -22,7 +22,6 @@ public class TripController {
 
     @PostMapping("/{userId}")
     public ResponseEntity<TripDetailResponse> createTrip(@PathVariable Long userId, @Valid @RequestBody TripGenerationRequest request){
-//        creditService.deductCredit(userId, 1);
         TripDetailResponse tripDetailResponse = tripService.generateTrip(userId, request);
         return ResponseEntity.ok().body(tripDetailResponse);
     }

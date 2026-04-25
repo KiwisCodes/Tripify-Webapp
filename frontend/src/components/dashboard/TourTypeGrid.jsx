@@ -1,39 +1,41 @@
 import React from 'react';
-import { Car, Train, Users, Briefcase } from 'lucide-react';
+import { Car, Train, Users, Briefcase, ArrowUpRight } from 'lucide-react';
+import Reveal from '../ui/Reveal';
 
 const types = [
-  { title: 'Private Trip', desc: 'Curated for you', icon: Briefcase, gradient: "from-slate-800 to-slate-900" },
-  { title: 'Self-Drive', desc: 'Own pace travel', icon: Car, gradient: "from-indigo-900 to-slate-900" },
-  { title: 'Train Tours', desc: 'Scenic rail journeys', icon: Train, gradient: "from-purple-900 to-slate-900" },
-  { title: 'Group Tour', desc: 'Shared adventures', icon: Users, gradient: "from-teal-900 to-slate-900" },
+  { title: 'Private Trip', desc: 'Curated for you', icon: Briefcase, color: "text-indigo-600", bg: "bg-indigo-50 dark:bg-indigo-500/10" },
+  { title: 'Self-Drive', desc: 'Own pace travel', icon: Car, color: "text-cyan-600", bg: "bg-cyan-50 dark:bg-cyan-500/10" },
+  { title: 'Train Tours', desc: 'Scenic rail journeys', icon: Train, color: "text-purple-600", bg: "bg-purple-50 dark:bg-purple-500/10" },
+  { title: 'Group Tour', desc: 'Shared adventures', icon: Users, color: "text-emerald-600", bg: "bg-emerald-50 dark:bg-emerald-500/10" },
 ];
 
 export default function TourTypeGrid() {
   return (
-    <div className="py-8">
-      <div className="flex items-center space-x-4 mb-6">
-        <h2 className="text-sm font-bold tracking-widest text-slate-400 uppercase">Tour Type</h2>
-        <div className="flex-grow h-px bg-slate-200"></div>
-      </div>
-      
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {types.map((type, idx) => {
-          const Icon = type.icon;
-          return (
-            <div 
-              key={idx} 
-              className={`relative rounded-2xl overflow-hidden h-40 bg-gradient-to-br ${type.gradient} shadow-sm group cursor-pointer`}
-            >
-              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
-              <div className="relative h-full flex flex-col items-center justify-center p-4 text-center z-10 transition-transform group-hover:-translate-y-1">
-                <Icon className="w-8 h-8 text-white/90 mb-3" />
-                <h3 className="font-bold text-white text-lg">{type.title}</h3>
-                <p className="text-white/70 text-sm">{type.desc}</p>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {types.map((type, idx) => {
+        const Icon = type.icon;
+        return (
+          <Reveal key={idx} animation="reveal" delay={idx * 0.1}>
+            <div className="group relative bg-white dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 rounded-[2rem] p-6 transition-all hover:bg-white dark:hover:bg-white/[0.05] hover:shadow-2xl hover:shadow-indigo-500/5 hover:-translate-y-2 cursor-pointer overflow-hidden">
+              {/* Decorative Circle */}
+              <div className={`absolute -top-12 -right-12 w-32 h-32 ${type.bg} rounded-full opacity-50 group-hover:scale-110 transition-transform duration-500`} />
+              
+              <div className="relative z-10">
+                <div className={`w-14 h-14 ${type.bg} ${type.color} rounded-2xl flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform`}>
+                  <Icon size={28} strokeWidth={1.5} />
+                </div>
+                <h3 className="font-bold text-slate-900 dark:text-white text-xl mb-1">{type.title}</h3>
+                <p className="text-slate-500 dark:text-slate-400 text-sm font-medium mb-4">{type.desc}</p>
+                
+                <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 text-xs font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                  Explore Now
+                  <ArrowUpRight size={14} />
+                </div>
               </div>
             </div>
-          );
-        })}
-      </div>
+          </Reveal>
+        );
+      })}
     </div>
   );
 }
