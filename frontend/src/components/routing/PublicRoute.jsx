@@ -2,11 +2,11 @@ import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 export default function PublicRoute({ children }) {
-  // const token = localStorage.getItem('tripify_token');
+  const token = localStorage.getItem('token');
 
   if (token) {
     return <Navigate to="/dashboard" replace />;
   }
 
-  return children ? children : <Outlet />;
+  return children ? children : <Navigate to="/login" replace />;
 }

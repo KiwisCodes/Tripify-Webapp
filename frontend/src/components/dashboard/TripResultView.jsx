@@ -1,6 +1,7 @@
 import React from 'react';
 import { Calendar, MapPin, Wallet, Clock, Map as MapIcon, ChevronRight, Sparkles, TrendingUp, Info } from 'lucide-react';
 import Reveal from '../ui/Reveal';
+import TripMap from './TripMap';
 
 export default function TripResultView({ tripData }) {
     if (!tripData) return null;
@@ -62,8 +63,13 @@ export default function TripResultView({ tripData }) {
             {/* Content Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
                 
-                {/* Left: Detailed Itinerary */}
+                {/* Left: Detailed Itinerary & Map */}
                 <div className="lg:col-span-2 space-y-8">
+                    {/* Interactive Trip Map */}
+                    <Reveal animation="reveal" className="w-full">
+                        <TripMap dayItineraries={dayItineraries} destinationCity={destinationCity} />
+                    </Reveal>
+
                     {dayItineraries.map(({ dayNumber, dayTheme, items }, dayIdx) => (
                         <Reveal 
                             key={dayNumber} 
